@@ -43,7 +43,6 @@ class SuperBuilderGenerator(session: FirSession) : AbstractBuilderGenerator<Supe
         const val CLASS_TYPE_PARAMETER_INDEX_FROM_END = 2
         const val BUILDER_TYPE_PARAMETER_INDEX_FROM_END = 1
         private val startProjectionsList = listOf(ConeStarProjection, ConeStarProjection)
-        private val SELF = Name.identifier("self")
     }
 
     private val processedBuilderKeys: FirCache<BuilderKey, Boolean, Nothing?> = session.firCachesFactory.createCache { true }
@@ -69,7 +68,7 @@ class SuperBuilderGenerator(session: FirSession) : AbstractBuilderGenerator<Supe
     override fun MutableMap<Name, FirNamedFunctionSymbol>.addSpecialBuilderMethods(
         builder: SuperBuilder,
         builderSymbol: FirClassSymbol<*>,
-        ownerDeclaration: FirDeclaration,
+        builderDeclaration: FirDeclaration,
         substitutor: ConeSubstitutor,
         existingFunctionNames: Set<Name>,
     ) {
@@ -80,7 +79,7 @@ class SuperBuilderGenerator(session: FirSession) : AbstractBuilderGenerator<Supe
             builderSymbol.typeParameterSymbols.elementAtOrNull(builderSymbol.typeParameterSymbols.size - CLASS_TYPE_PARAMETER_INDEX_FROM_END)?.defaultType
                 ?: return
 
-        addIfNonClashing(SELF, existingFunctionNames) {
+        addIfNonClashing(Name.identifier("self"), existingFunctionNames) {
             builderSymbol.createJavaMethod(
                 it,
                 valueParameters = emptyList(),
@@ -99,14 +98,12 @@ class SuperBuilderGenerator(session: FirSession) : AbstractBuilderGenerator<Supe
                 modality = Modality.ABSTRACT,
                 key = BuilderGeneratorKey(
                     BuilderDeclarationType.Function.Build(
-                        ownerDeclaration.symbol, lombokService.config.singularUseGuava
+                        builderDeclaration.symbol, lombokService.config.singularUseGuava
                     )
                 )
             ).symbol
         }
     }
-
-    override fun SuperBuilder.getSpecialBuilderMethodNames(): List<Name> = listOf(SELF, Name.identifier(buildMethodName))
 
     override fun FirRegularClassBuilder.completeBuilder(
         classSymbol: FirClassSymbol<*>,
@@ -156,7 +153,7 @@ class SuperBuilderGenerator(session: FirSession) : AbstractBuilderGenerator<Supe
 
             if (!superTypeSymbol.isClass) return@firstNotNullOfOrNull null
 
-            val builderNames = getBuilderNames(superTypeSymbol, filterExistingNames = true)
+            val builderNames = getBuilderNames(superTypeSymbol)
 
             // `@SingleBuilder` is only applicable to classes. It means it can be <= 1 builder in a super type.
             val builderName = builderNames.firstOrNull() ?: return@firstNotNullOfOrNull null

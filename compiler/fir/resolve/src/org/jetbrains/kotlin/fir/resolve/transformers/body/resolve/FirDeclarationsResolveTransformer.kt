@@ -302,7 +302,6 @@ open class FirDeclarationsResolveTransformer(
                 }
             }
             if (session.languageVersionSettings.getFlag(AnalysisFlags.headerMode) &&
-                !session.languageVersionSettings.getFlag(AnalysisFlags.headerModeKeepPropertyBodies) &&
                 !property.isConst &&
                 property.returnTypeRef !is FirImplicitTypeRef &&
                 !property.hasAnonymousReturnType(session)

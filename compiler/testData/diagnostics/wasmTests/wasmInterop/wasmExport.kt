@@ -142,5 +142,6 @@ fun supportedParameterTypes(
     p10: ULong,
 ): Unit {}
 
-<!WASM_EXPORT_UNSUPPORTED_FUNCTION_KIND!>@WasmExport("a")
-fun String.stringReceiver()<!> {}
+// receivers are not checked
+@WasmExport("a")
+fun String.stringReceiver() {}

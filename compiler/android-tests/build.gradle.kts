@@ -56,7 +56,7 @@ abstract class JdkHomeArgumentProvider : CommandLineArgumentProvider {
 }
 
 projectTests {
-    testTask {
+    testTask(javaLauncher = JdkMajorVersion.JDK_17_0) {
         develocity {
             testRetry.maxRetries.set(0)
         }

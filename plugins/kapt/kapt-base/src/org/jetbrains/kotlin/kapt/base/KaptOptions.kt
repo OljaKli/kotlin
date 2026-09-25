@@ -129,7 +129,6 @@ enum class KaptFlag(val description: String, val defaultValue: Boolean = false) 
     INCREMENTAL_APT("Incremental annotation processing (apt mode)"),
     STRIP_METADATA("Strip @Metadata annotations from stubs"),
     ISOLATE_PROCESSORS_FROM_BUILD_CLASSPATH("Hide the build process classpath from annotation processors, exposing only JDK classes"),
-    HEADER_MODE("Skip function body resolution during stub generation"),
     ;
 }
 

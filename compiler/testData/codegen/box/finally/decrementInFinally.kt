@@ -1,4 +1,5 @@
 // DUMP_IR
+// WASM_IGNORE_FOR: vm=WasmEdge
 // DUMP_IR_DIFFERENCE: JS_IR, JS_IR_ES6
 
 fun box(): String {

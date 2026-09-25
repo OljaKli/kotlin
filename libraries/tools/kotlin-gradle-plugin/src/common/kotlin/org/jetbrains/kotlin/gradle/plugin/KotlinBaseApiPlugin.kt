@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.gradle.InternalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.*
 import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
 import org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask
-import org.jetbrains.kotlin.gradle.internal.applyPropertyConventions
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAgpCompilationFactory
@@ -82,7 +81,7 @@ abstract class KotlinBaseApiPlugin : DefaultKotlinBasePlugin(), KotlinJvmFactory
     }
 
     override val kaptExtension: KaptExtension by lazy {
-        myProject.objects.newInstance(KaptExtension::class.java).applyPropertyConventions(myProject)
+        myProject.objects.newInstance(KaptExtension::class.java)
     }
 
     @Deprecated("Replaced with 'registerKotlinJvmCompileTask(taskName, compilerOptions, explicitApiMode)'")

@@ -6,6 +6,7 @@
 // This `startTest` shares its export name with the grouped batches' result-collecting driver on purpose; the two never
 // end up in the same binary, see `wasmWasiGroupedTestsEntryPointSource`.
 
+@kotlin.wasm.WasmExport
 fun runBoxTest(): Boolean {
     val boxResult: String = box()
     val isOk = boxResult == "OK"

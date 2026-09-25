@@ -9,7 +9,6 @@ import org.jetbrains.kotlin.kapt.base.KaptFlag
 import org.jetbrains.kotlin.kapt.base.KaptOptions
 import org.jetbrains.kotlin.kapt.base.ProcessorLoaderImpl
 import org.jetbrains.kotlin.kapt.base.util.WriterBackedKaptLogger
-import org.jetbrains.kotlin.kapt.base.util.doOpenInternalPackagesIfRequired
 import org.jetbrains.kotlin.kapt.base.util.findClassLoaderWithJavac
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -25,10 +24,6 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 class ProcessorLoaderTest {
-    init {
-        doOpenInternalPackagesIfRequired()
-    }
-
     @Suppress("PropertyName")
     @JvmField
     @TempDir

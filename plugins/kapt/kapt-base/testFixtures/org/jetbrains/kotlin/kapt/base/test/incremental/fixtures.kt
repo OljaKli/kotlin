@@ -5,14 +5,13 @@
 
 package org.jetbrains.kotlin.kapt.base.test.incremental
 
-import com.sun.source.util.JavacTask
 import com.sun.source.util.TaskListener
 import com.sun.source.util.Trees
+import com.sun.tools.javac.api.JavacTaskImpl
 import org.jetbrains.kotlin.kapt.base.incremental.DeclaredProcType
 import org.jetbrains.kotlin.kapt.base.incremental.IncrementalProcessor
 import org.jetbrains.kotlin.kapt.base.incremental.RuntimeProcType
 import org.jetbrains.kotlin.kapt.base.util.WriterBackedKaptLogger
-import org.jetbrains.kotlin.kapt.base.util.doOpenInternalPackagesIfRequired
 import java.io.File
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Filer
@@ -33,7 +32,6 @@ fun runAnnotationProcessing(
     classpath: List<File> = emptyList(),
     listener: (Elements, Trees) -> TaskListener? = { _, _ -> null }
 ) {
-    doOpenInternalPackagesIfRequired()
     val compiler = ToolProvider.getSystemJavaCompiler()
     compiler.getStandardFileManager(null, null, null).use { fileManager ->
         val javaSrcs = fileManager.getJavaFileObjectsFromFiles(srcFiles)
@@ -48,7 +46,7 @@ fun runAnnotationProcessing(
                 ),
                 null,
                 javaSrcs
-            ) as JavacTask
+            ) as JavacTaskImpl
 
         val taskListener = listener(compilationTask.elements, Trees.instance(compilationTask))
         taskListener?.let { compilationTask.addTaskListener(it) }
@@ -69,7 +67,7 @@ fun compileSources(srcFiles: Iterable<File>, outputDir: File) {
                 listOf("-d", outputDir.absolutePath),
                 null,
                 fileManager.getJavaFileObjectsFromFiles(srcFiles)
-            ) as JavacTask
+            ) as JavacTaskImpl
 
         compilationTask.call()
     }

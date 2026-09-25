@@ -1,3 +1,4 @@
+// WASM_IGNORE_FOR: vm=WasmEdge
 
 fun unsupportedEx() {
     if (true) throw UnsupportedOperationException()

@@ -101,9 +101,6 @@ object AnalysisFlags {
 
     val headerModeType by AnalysisFlag.Delegates.HeaderModeTypeAnyByDefault
 
-    /** In [headerMode], keep property initializers and accessor bodies. Used by KAPT. */
-    val headerModeKeepPropertyBodies by AnalysisFlag.Delegates.Boolean
-
     val firAggressivePruning by AnalysisFlag.Delegates.Boolean
 }
 

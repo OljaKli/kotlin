@@ -75,6 +75,7 @@ sourceSets {
 }
 
 fun Test.configure(configureJUnit: JUnitPlatformOptions.() -> Unit = {}) {
+    javaLauncher = project.getToolchainLauncherFor(JdkMajorVersion.JDK_1_8)
     useJUnitPlatform {
         configureJUnit()
     }
@@ -98,6 +99,7 @@ projectTests {
     testTask(
         defineJDKEnvVariables = environment,
         maxHeapSize = testMaxHeapSizeLarge,
+        garbageCollector = GarbageCollector.Parallel
     ) {
         configure()
     }
@@ -107,6 +109,7 @@ projectTests {
         defineJDKEnvVariables = environment,
         skipInLocalBuild = true,
         maxHeapSize = testMaxHeapSizeLarge,
+        garbageCollector = GarbageCollector.Parallel
     ) {
         configure {
             excludeTags("FirPsiCodegenTest")

@@ -21,7 +21,6 @@ object WasmBaseDeclarationCheckers : DeclarationCheckers() {
     override val basicDeclarationCheckers: Set<FirBasicDeclarationChecker> = setOf(
         FirWasmImportAnnotationChecker,
         FirWasmExportAnnotationChecker,
-        FirWasmExportDeclarationChecker.Common,
         FirWasmExternalChecker,
     )
 
@@ -40,7 +39,6 @@ object WasmJsDeclarationCheckers : DeclarationCheckers() {
         FirWasmJsFunAnnotationChecker,
         FirJsExportAnnotationChecker,
         FirWasmJsExportDeclarationChecker,
-        FirWasmExportDeclarationChecker.WasmJs,
         FirJsExportedActualMatchExpectChecker,
         FirWasmJsModuleChecker,
         FirWasmExternalFileChecker,
