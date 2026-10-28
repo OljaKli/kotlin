@@ -112,7 +112,7 @@ KaNamedFunctionSymbol:
   getContainingModule: KaSourceModule "Sources of main"
   deprecation: null
   returnValueStatus: Unspecified
-  javaMethodName: null
+  javaMethodName: companionBlockFunction
   importableFqName: ValueClass.companionBlockFunction
 
 KaNamedFunctionSymbol:
@@ -230,7 +230,7 @@ KaKotlinPropertySymbol:
     getContainingJvmClassName: ValueClass
     getContainingModule: KaSourceModule "Sources of main"
     deprecation: null
-    javaMethodName: null
+    javaMethodName: getCompanionBlockProperty
     importableFqName: null
   hasBackingField: false
   hasGetter: true
@@ -340,7 +340,7 @@ KaKotlinPropertySymbol:
     getContainingJvmClassName: ValueClass
     getContainingModule: KaSourceModule "Sources of main"
     deprecation: null
-    javaMethodName: null
+    javaMethodName: getCompanionBlockVariable
     importableFqName: null
   hasBackingField: true
   hasGetter: true
@@ -478,7 +478,7 @@ KaKotlinPropertySymbol:
     getContainingJvmClassName: ValueClass
     getContainingModule: KaSourceModule "Sources of main"
     deprecation: null
-    javaMethodName: null
+    javaMethodName: setCompanionBlockVariable
     importableFqName: null
   typeParameters: []
   visibility: PUBLIC
