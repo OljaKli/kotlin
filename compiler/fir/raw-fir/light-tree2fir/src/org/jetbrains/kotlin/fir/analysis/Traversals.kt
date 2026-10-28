@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.fir.analysis
 
+import org.jetbrains.kotlin.syntax.BasicElementTypes
 import org.jetbrains.kotlin.syntax.KtNodeTypes
 import org.jetbrains.kotlin.syntax.KtTokens
 import org.jetbrains.kotlin.utils.addToStdlib.popLast
@@ -19,7 +20,7 @@ inline fun <T> isCallTheFirstStatement(
     while (stack.isNotEmpty()) {
         val child = stack.popLast()
         when (getElementTokenId(child)) {
-            KtTokens.LBRACE_ID, KtTokens.WHITE_SPACE_ID, KtTokens.DOT_ID, KtTokens.EOL_COMMENT_ID -> {}
+            KtTokens.LBRACE_ID, BasicElementTypes.WHITE_SPACE_ID, KtTokens.DOT_ID, KtTokens.EOL_COMMENT_ID -> {}
             KtNodeTypes.CALL_EXPRESSION_ID -> return true
             KtNodeTypes.REFERENCE_EXPRESSION_ID -> {}
             KtNodeTypes.DOT_QUALIFIED_EXPRESSION_ID -> {

@@ -5,11 +5,12 @@
 
 package org.jetbrains.kotlin.syntax
 
-object KtTokens {
-    const val DOC_COMMENT_ID: Int = NO_ID + 1
-    const val WHITE_SPACE_ID: Int = DOC_COMMENT_ID + 1
+import org.jetbrains.kotlin.syntax.BasicElementTypes.ERROR_ELEMENT_ID
 
-    const val EOF_ID: Int = WHITE_SPACE_ID + 1
+object KtTokens {
+    const val DOC_COMMENT_ID: Int = ERROR_ELEMENT_ID + 1
+
+    const val EOF_ID: Int = DOC_COMMENT_ID + 1
     const val RESERVED_ID: Int = EOF_ID + 1
     const val BLOCK_COMMENT_ID: Int = RESERVED_ID + 1
     const val EOL_COMMENT_ID: Int = BLOCK_COMMENT_ID + 1
