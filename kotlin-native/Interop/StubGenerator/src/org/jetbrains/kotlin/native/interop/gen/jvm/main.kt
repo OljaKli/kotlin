@@ -614,7 +614,7 @@ private fun loadLibraries(cinteropArguments: CInteropArguments, target: KonanTar
         libraryPaths(cinteropArguments.library)
         libraryProviders(
                 KlibNativeDistributionLibraryProvider(File(distribution.konanHome)) {
-                    withStdlib()
+                    runUnless(cinteropArguments.nostdlib) { withStdlib() }
                     runUnless(noDefaultLibs) { withPlatformLibs(target) }
                 }
         )

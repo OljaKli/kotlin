@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.konan.test.blackbox
 import org.jetbrains.kotlin.io.propertyList
 import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.test.blackbox.support.TestCInteropArgs
+import org.jetbrains.kotlin.konan.test.blackbox.support.compilation.CompilationToolException
 import org.jetbrains.kotlin.konan.test.blackbox.support.compilation.TestCompilationArtifact.KLIB
 import org.jetbrains.kotlin.konan.test.blackbox.support.compilation.TestCompilationResult.Companion.assertSuccess
 import org.jetbrains.kotlin.konan.test.blackbox.support.settings.KotlinNativeHome
@@ -20,6 +21,7 @@ import org.jetbrains.kotlin.test.services.JUnit5Assertions.assertTrue
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.io.File
 import java.util.*
 
@@ -79,6 +81,12 @@ class CInteropKlibDependenciesTest : AbstractNativeSimpleTest() {
         doTest()
         doTest("-l", stdlibPath)
         doTest("-l", stdlibPath, "-l", posixPath)
+
+        assertThrows<CompilationToolException> {
+            doTest("-nostdlib")
+        }
+        doTest("-nostdlib", "-l", stdlibPath)
+        doTest("-nostdlib", "-l", stdlibPath, "-l", posixPath)
     }
 
     private fun testDataDir(scenario: String): File =
