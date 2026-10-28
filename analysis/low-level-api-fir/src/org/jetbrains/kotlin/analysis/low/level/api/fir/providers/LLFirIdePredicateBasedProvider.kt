@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.fir.extensions.predicate.*
 import org.jetbrains.kotlin.fir.psi
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.types.FirResolvedTypeRef
+import org.jetbrains.kotlin.fir.types.abbreviatedType
 import org.jetbrains.kotlin.fir.types.classId
 import org.jetbrains.kotlin.fir.visitors.FirDefaultVisitorVoid
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
@@ -183,6 +184,9 @@ internal class LLFirIdePredicateBasedProvider(
         val firResolvedAnnotations = declaration.annotations
             .asSequence()
             .mapNotNull { it.annotationTypeRef as? FirResolvedTypeRef }
+            // The compiler collects plugin annotations at the COMPILER_REQUIRED_ANNOTATIONS phase, where type aliases are not expanded,
+            // so it never matches a plugin annotation used through a type alias (KT-69777)
+            .filter { it.coneType.abbreviatedType == null }
             .mapNotNull { it.coneType.classId }
             .map { it.asSingleFqName() }
             .toSet()

@@ -150,7 +150,7 @@ class LLGenericAnalysisTest : AbstractAnalysisApiExecutionTest("testData/generic
      */
     @Test
     fun redeclaredAnnotationTypeAlias(ktFile: KtFile, testServices: TestServices) {
-        assertAnnotationsOnMyClass(ktFile, testServices, "test.MyAnnotation")
+        assertAnnotationsOnMyClass(ktFile, testServices)
     }
 
     /**
@@ -160,7 +160,7 @@ class LLGenericAnalysisTest : AbstractAnalysisApiExecutionTest("testData/generic
      */
     @Test
     fun qualifiedAnnotationTypeAlias(ktFile: KtFile, testServices: TestServices) {
-        assertAnnotationsOnMyClass(ktFile, testServices, "other.MyAnnotation")
+        assertAnnotationsOnMyClass(ktFile, testServices)
     }
 
     /**
@@ -170,7 +170,7 @@ class LLGenericAnalysisTest : AbstractAnalysisApiExecutionTest("testData/generic
      */
     @Test
     fun cyclicAnnotationTypeAlias(ktFile: KtFile, testServices: TestServices) {
-        assertAnnotationsOnMyClass(ktFile, testServices, "test.MyAnnotation")
+        assertAnnotationsOnMyClass(ktFile, testServices)
     }
 
     private fun assertAnnotationsOnMyClass(ktFile: KtFile, testServices: TestServices, vararg expected: String) {
@@ -346,15 +346,15 @@ class LLGenericAnalysisTest : AbstractAnalysisApiExecutionTest("testData/generic
             }
 
             assertEquals(
-                mapOf("Aliased" to true, "AliasedWithDeprecated" to false, "Direct" to true),
+                mapOf("Aliased" to false, "AliasedWithDeprecated" to false, "Direct" to true),
                 matchesAt(FirResolvePhase.COMPILER_REQUIRED_ANNOTATIONS),
             )
             assertEquals(
-                mapOf("Aliased" to true, "AliasedWithDeprecated" to true, "Direct" to true),
+                mapOf("Aliased" to false, "AliasedWithDeprecated" to false, "Direct" to true),
                 matchesAt(FirResolvePhase.TYPES),
             )
             assertEquals(
-                setOf("Aliased", "AliasedWithDeprecated", "Direct"),
+                setOf("Direct"),
                 provider.getSymbolsByPredicate(LookupPredicate.create { annotated(annotation) }).mapTo(mutableSetOf()) {
                     it.predicateTestName()
                 },
