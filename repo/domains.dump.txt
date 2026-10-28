@@ -171,6 +171,7 @@ AnalysisApi:
  - prepare/analysis-api
 
 BuildToolsApi:
+ - build-tools/libraries
  - compiler/build-tools/AGENTS.md
  - compiler/build-tools/CLAUDE.md
  - compiler/build-tools/README.md
