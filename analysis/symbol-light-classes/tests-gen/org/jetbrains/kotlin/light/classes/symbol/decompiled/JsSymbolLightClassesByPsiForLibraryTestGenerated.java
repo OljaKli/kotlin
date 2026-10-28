@@ -2441,6 +2441,12 @@ public class JsSymbolLightClassesByPsiForLibraryTestGenerated extends AbstractJs
       }
 
       @Test
+      @TestMetadata("valueClassCompanionBlock.kt")
+      public void testValueClassCompanionBlock() {
+        run("valueClassCompanionBlock.kt");
+      }
+
+      @Test
       @TestMetadata("vararg.kt")
       public void testVararg() {
         run("vararg.kt");

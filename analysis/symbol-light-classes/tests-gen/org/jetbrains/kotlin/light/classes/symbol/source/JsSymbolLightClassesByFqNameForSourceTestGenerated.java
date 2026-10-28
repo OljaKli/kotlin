@@ -716,6 +716,12 @@ public class JsSymbolLightClassesByFqNameForSourceTestGenerated extends Abstract
     }
 
     @Test
+    @TestMetadata("CompanionBlockInsideValueClassUnmangled.kt")
+    public void testCompanionBlockInsideValueClassUnmangled() {
+      run("CompanionBlockInsideValueClassUnmangled.kt");
+    }
+
+    @Test
     @TestMetadata("CompanionBlockJvmName.kt")
     public void testCompanionBlockJvmName() {
       run("CompanionBlockJvmName.kt");
