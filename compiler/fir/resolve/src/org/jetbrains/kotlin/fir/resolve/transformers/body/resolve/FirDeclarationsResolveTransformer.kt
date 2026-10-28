@@ -278,7 +278,8 @@ open class FirDeclarationsResolveTransformer(
                         // we still need to resolve types in accessors (as per IMPLICIT_TYPES_BODY_RESOLVE contract).
                         property.getter?.transformTypeWithPropertyType(propertyTypeRefAfterResolve)
                         property.setter?.transformTypeWithPropertyType(propertyTypeRefAfterResolve)
-                        property.setter?.transformReturnTypeRef(
+                        // An explicit return type is transformed on the body phase, when its annotation arguments are calculated
+                        property.setter?.takeIf { it.returnTypeRef is FirImplicitTypeRef }?.transformReturnTypeRef(
                             transformer,
                             ResolutionMode.UpdateImplicitTypeRef(
                                 buildResolvedTypeRef {
