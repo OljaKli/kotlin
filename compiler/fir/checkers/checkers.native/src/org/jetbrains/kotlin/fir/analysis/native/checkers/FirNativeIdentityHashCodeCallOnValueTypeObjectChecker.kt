@@ -10,7 +10,8 @@ import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirFunctionCallChecker
-import org.jetbrains.kotlin.fir.analysis.checkers.isValueClass
+import org.jetbrains.kotlin.fir.analysis.checkers.IdentityKind
+import org.jetbrains.kotlin.fir.analysis.checkers.identityKind
 import org.jetbrains.kotlin.fir.analysis.checkers.reportIdentitySensitiveOperationIfWillBecomeValueClass
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.fir.analysis.diagnostics.native.FirNativeErrors
@@ -18,8 +19,6 @@ import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.resolvedArgumentMapping
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.fir.types.ConeKotlinType
-import org.jetbrains.kotlin.fir.types.isPrimitiveOrNullablePrimitive
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
@@ -37,23 +36,24 @@ internal object FirNativeIdentityHashCodeCallOnValueTypeObjectChecker : FirFunct
         when (symbol.callableId) {
             identityHashCodeCallableId -> {
                 val argumentType = expression.extensionReceiver?.resolvedType ?: return
-                if (argumentType.isValueType()) {
-                    reporter.reportOn(expression.source, FirNativeErrors.IDENTITY_HASH_CODE_ON_VALUE_TYPE, argumentType)
-                } else {
-                    reportIdentitySensitiveOperationIfWillBecomeValueClass(expression.source, argumentType)
+                when (argumentType.identityKind()) {
+                    IdentityKind.VALUE_TYPE, IdentityKind.FLEXIBLE_PRIMITIVE ->
+                        reporter.reportOn(expression.source, FirNativeErrors.IDENTITY_HASH_CODE_ON_VALUE_TYPE, argumentType)
+                    IdentityKind.WILL_BECOME_VALUE -> reportIdentitySensitiveOperationIfWillBecomeValueClass(expression.source, argumentType)
+                    IdentityKind.VALUE_BASED, null -> {}
                 }
             }
             weakReferenceConstructorCallableId -> {
                 val resourceParameter = (symbol as? FirFunctionSymbol<*>)?.valueParameterSymbols?.firstOrNull() ?: return
                 val argument = expression.resolvedArgumentMapping?.entries?.firstOrNull { it.value.symbol == resourceParameter }?.key ?: return
                 val argumentType = argument.resolvedType
-                if (argumentType.isValueType()) {
-                    reporter.reportOn(argument.source, FirErrors.IDENTITY_SENSITIVE_OPERATIONS_WITH_VALUE_TYPE, argumentType)
+                when (argumentType.identityKind()) {
+                    IdentityKind.VALUE_TYPE, IdentityKind.FLEXIBLE_PRIMITIVE ->
+                        reporter.reportOn(argument.source, FirErrors.IDENTITY_SENSITIVE_OPERATIONS_WITH_VALUE_TYPE, argumentType)
+                    IdentityKind.WILL_BECOME_VALUE -> reportIdentitySensitiveOperationIfWillBecomeValueClass(argument.source, argumentType)
+                    IdentityKind.VALUE_BASED, null -> {}
                 }
             }
         }
     }
-
-    context(context: CheckerContext)
-    private fun ConeKotlinType.isValueType(): Boolean = isPrimitiveOrNullablePrimitive || isValueClass(context.session)
 }

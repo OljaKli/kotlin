@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.fir.declarations.utils.modality
 import org.jetbrains.kotlin.fir.resolve.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
+import org.jetbrains.kotlin.fir.types.ConeClassLikeType
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.typeContext
 import org.jetbrains.kotlin.fir.types.withNullability
@@ -94,9 +95,17 @@ fun reportIdentitySensitiveOperationIfWillBecomeValueClasses(source: KtSourceEle
     reporter.reportOn(source, FirErrors.IDENTITY_SENSITIVE_OPERATION_ON_WILL_BECOME_VALUE_CLASS, annotatedType)
 }
 
+/**
+ * Whether this type is a class annotated with '@WillBecomeValue' or, like for the other value-like types, is bounded by one
+ * (see [collectUpperBounds]).
+ */
+fun ConeKotlinType.isWillBecomeValueType(session: FirSession): Boolean =
+    willBecomeValueBound(session) != null
+
+private fun ConeKotlinType.willBecomeValueBound(session: FirSession): ConeClassLikeType? =
+    collectUpperBounds(session.typeContext).firstOrNull { it.toRegularClassSymbol(session)?.hasWillBecomeValueAnnotation(session) == true }
+
 // A type parameter or an intersection type is checked by its upper bounds, and the annotated one is reported.
 context(context: CheckerContext)
 private fun willBecomeValueTypeOf(type: ConeKotlinType): ConeKotlinType? =
-    type.collectUpperBounds(context.session.typeContext)
-        .firstOrNull { it.toRegularClassSymbol(context.session)?.hasWillBecomeValueAnnotation(context.session) == true }
-        ?.withNullability(nullable = false, context.session.typeContext)
+    type.willBecomeValueBound(context.session)?.withNullability(nullable = false, context.session.typeContext)
