@@ -8,7 +8,7 @@ package org.jetbrains.kotlin.fir.lightTree.fir.modifier
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.Visibility
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
+import org.jetbrains.kotlin.syntax.KtTokens
 import org.jetbrains.kotlin.types.Variance
 
 open class ModifierList<Node : Any>(var modifiers: Long = ModifierFlag.NONE.value) {

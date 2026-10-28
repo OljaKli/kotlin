@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.jetbrains.kotlin.lexer.KtTokens.*;
+import static org.jetbrains.kotlin.syntax.KtTokens.*;
 
 /*package*/ abstract class AbstractKotlinParsing {
     private static final Map<String, KtKeywordToken> SOFT_KEYWORD_TEXTS = new HashMap<>();
@@ -322,23 +323,23 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
                 break;
             }
             switch (getTokenId()) {
-                case LPAR_Id:
+                case LPAR_ID:
                     openParentheses++;
                     opens.push(LPAR);
                     break;
-                case LT_Id:
+                case LT_ID:
                     openAngleBrackets++;
                     opens.push(LT);
                     break;
-                case LBRACE_Id:
+                case LBRACE_ID:
                     openBraces++;
                     opens.push(LBRACE);
                     break;
-                case LBRACKET_Id:
+                case LBRACKET_ID:
                     openBrackets++;
                     opens.push(LBRACKET);
                     break;
-                case RPAR_Id:
+                case RPAR_ID:
                     openParentheses--;
                     if (opens.isEmpty() || opens.pop() != LPAR) {
                         if (pattern.handleUnmatchedClosing(RPAR)) {
@@ -346,13 +347,13 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
                         }
                     }
                     break;
-                case GT_Id:
+                case GT_ID:
                     openAngleBrackets--;
                     break;
-                case RBRACE_Id:
+                case RBRACE_ID:
                     openBraces--;
                     break;
-                case RBRACKET_Id:
+                case RBRACKET_ID:
                     openBrackets--;
                     break;
             }

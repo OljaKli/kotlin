@@ -24,6 +24,7 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
 import static org.jetbrains.kotlin.parsing.KotlinParsing.AnnotationParsingMode.*;
 import static org.jetbrains.kotlin.parsing.KotlinWhitespaceAndCommentsBindersKt.PRECEDING_ALL_BINDER;
 import static org.jetbrains.kotlin.parsing.KotlinWhitespaceAndCommentsBindersKt.TRAILING_ALL_BINDER;
+import static org.jetbrains.kotlin.syntax.KtTokens.*;
 
 public class KotlinParsing extends AbstractKotlinParsing {
     private static final TokenSet GT_COMMA_COLON_SET = TokenSet.create(GT, COMMA, COLON);
@@ -522,24 +523,24 @@ public class KotlinParsing extends AbstractKotlinParsing {
             @NotNull DeclarationParsingMode declarationParsingMode
     ) {
         switch (getTokenId()) {
-            case CLASS_KEYWORD_Id:
-            case INTERFACE_KEYWORD_Id:
+            case CLASS_KEYWORD_ID:
+            case INTERFACE_KEYWORD_ID:
                 return parseClass(detector.isEnumDetected(), true);
-            case FUN_KEYWORD_Id:
+            case FUN_MODIFIER_ID:
                 return parseFunction();
-            case VAL_KEYWORD_Id:
-            case VAR_KEYWORD_Id:
+            case VAL_KEYWORD_ID:
+            case VAR_KEYWORD_ID:
                 return parseProperty(declarationParsingMode);
-            case LPAR_Id:
-            case LBRACKET_Id:
+            case LPAR_ID:
+            case LBRACKET_ID:
                 IElementType lookahead = lookahead(1);
                 return lookahead == VAL_KEYWORD || lookahead == VAR_KEYWORD ? parseProperty(declarationParsingMode) : null;
-            case TYPE_ALIAS_KEYWORD_Id:
+            case TYPE_ALIAS_KEYWORD_ID:
                 return parseTypeAlias();
-            case OBJECT_KEYWORD_Id:
+            case OBJECT_KEYWORD_ID:
                 parseObject(nameParsingModeForObject, true);
                 return OBJECT_DECLARATION;
-            case IDENTIFIER_Id:
+            case IDENTIFIER_ID:
                 if (detector.isEnumDetected() && declarationParsingMode.canBeEnumUsedAsSoftKeyword) {
                     return parseClass(true, false);
                 }

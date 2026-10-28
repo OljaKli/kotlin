@@ -14,9 +14,9 @@ import org.jetbrains.kotlin.fir.builder.Context
 import org.jetbrains.kotlin.fir.declarations.FirReplSnippet
 import org.jetbrains.kotlin.fir.declarations.builder.FirReplSnippetBuilder
 import org.jetbrains.kotlin.fir.expressions.builder.FirBlockBuilder
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
-import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
-import org.jetbrains.kotlin.kmp.utils.SyntaxElementTypesWithIds
+import org.jetbrains.kotlin.syntax.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtTokens
+import org.jetbrains.kotlin.syntax.NO_ID
 import org.jetbrains.kotlin.types.ConstantValueKind
 import org.jetbrains.kotlin.utils.addToStdlib.shouldNotBeCalled
 
@@ -201,7 +201,7 @@ abstract class AbstractTreeRawFirBuilder<Node : Any, Type : Any>(
     companion object {
         val ignoredTokensId: HashSet<Int> = hashSetOf(
             KtTokens.EOL_COMMENT_ID, KtTokens.BLOCK_COMMENT_ID, KtTokens.DOC_COMMENT_ID, KtTokens.SHEBANG_COMMENT_ID,
-            KtTokens.WHITE_SPACE_ID, KtTokens.SEMICOLON_ID, SyntaxElementTypesWithIds.NO_ID,
+            KtTokens.WHITE_SPACE_ID, KtTokens.SEMICOLON_ID, NO_ID,
         )
     }
 }

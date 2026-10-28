@@ -10,6 +10,14 @@ import com.intellij.platform.syntax.SyntaxElementTypeSet
 import com.intellij.platform.syntax.parser.SyntaxTreeBuilder
 import org.jetbrains.kotlin.kmp.lexer.KtTokens
 import org.jetbrains.kotlin.kmp.utils.Stack
+import org.jetbrains.kotlin.syntax.KtTokens.GT_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACKET_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LPAR_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LT_ID
+import org.jetbrains.kotlin.syntax.KtTokens.RBRACE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.RBRACKET_ID
+import org.jetbrains.kotlin.syntax.KtTokens.RPAR_ID
 
 internal abstract class AbstractKotlinParsing(
     protected val builder: SemanticWhitespaceAwareSyntaxBuilder,
@@ -295,23 +303,23 @@ internal abstract class AbstractKotlinParsing(
                 break
             }
             when (this.tokenId) {
-                KtTokens.LPAR_ID -> {
+                LPAR_ID -> {
                     openParentheses++
                     opens.push(KtTokens.LPAR)
                 }
-                KtTokens.LT_ID -> {
+                LT_ID -> {
                     openAngleBrackets++
                     opens.push(KtTokens.LT)
                 }
-                KtTokens.LBRACE_ID -> {
+                LBRACE_ID -> {
                     openBraces++
                     opens.push(KtTokens.LBRACE)
                 }
-                KtTokens.LBRACKET_ID -> {
+                LBRACKET_ID -> {
                     openBrackets++
                     opens.push(KtTokens.LBRACKET)
                 }
-                KtTokens.RPAR_ID -> {
+                RPAR_ID -> {
                     openParentheses--
                     if (opens.isEmpty() || opens.pop() !== KtTokens.LPAR) {
                         if (pattern.handleUnmatchedClosing(KtTokens.RPAR)) {
@@ -319,9 +327,9 @@ internal abstract class AbstractKotlinParsing(
                         }
                     }
                 }
-                KtTokens.GT_ID -> openAngleBrackets--
-                KtTokens.RBRACE_ID -> openBraces--
-                KtTokens.RBRACKET_ID -> openBrackets--
+                GT_ID -> openAngleBrackets--
+                RBRACE_ID -> openBraces--
+                RBRACKET_ID -> openBrackets--
             }
 
             advance() // skip token

@@ -46,6 +46,56 @@ import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
 import org.jetbrains.kotlin.kmp.parser.utils.KotlinParsing.Companion.EXPRESSION_FIRST
 import org.jetbrains.kotlin.kmp.parser.utils.KotlinParsing.Companion.EXPRESSION_FOLLOW
 import org.jetbrains.kotlin.kmp.parser.utils.KotlinParsing.MultiDeclarationMode
+import org.jetbrains.kotlin.syntax.KtTokens.ANDAND_ID
+import org.jetbrains.kotlin.syntax.KtTokens.ARROW_ID
+import org.jetbrains.kotlin.syntax.KtTokens.AS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.AS_SAFE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.BREAK_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.CHARACTER_LITERAL_ID
+import org.jetbrains.kotlin.syntax.KtTokens.CLASS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.COLON_ID
+import org.jetbrains.kotlin.syntax.KtTokens.COMMA_ID
+import org.jetbrains.kotlin.syntax.KtTokens.CONTINUE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.DOT_ID
+import org.jetbrains.kotlin.syntax.KtTokens.DO_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.ELSE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.ESCAPE_SEQUENCE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.FALSE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.FLOAT_LITERAL_ID
+import org.jetbrains.kotlin.syntax.KtTokens.FOR_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.FUN_MODIFIER_ID
+import org.jetbrains.kotlin.syntax.KtTokens.IDENTIFIER_ID
+import org.jetbrains.kotlin.syntax.KtTokens.IF_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.INTEGER_LITERAL_ID
+import org.jetbrains.kotlin.syntax.KtTokens.INTERFACE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.INTERPOLATION_PREFIX_ID
+import org.jetbrains.kotlin.syntax.KtTokens.IN_MODIFIER_ID
+import org.jetbrains.kotlin.syntax.KtTokens.IS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACKET_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LONG_TEMPLATE_ENTRY_START_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LPAR_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LT_ID
+import org.jetbrains.kotlin.syntax.KtTokens.NOT_IN_ID
+import org.jetbrains.kotlin.syntax.KtTokens.NOT_IS_ID
+import org.jetbrains.kotlin.syntax.KtTokens.NULL_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.OBJECT_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.OPEN_QUOTE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.RBRACE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.REGULAR_STRING_PART_ID
+import org.jetbrains.kotlin.syntax.KtTokens.RETURN_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.SEMICOLON_ID
+import org.jetbrains.kotlin.syntax.KtTokens.SHORT_TEMPLATE_ENTRY_START_ID
+import org.jetbrains.kotlin.syntax.KtTokens.SUPER_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.THIS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.THROW_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.TRUE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.TRY_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.TYPE_ALIAS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.VAL_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.VAR_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.WHEN_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.WHILE_KEYWORD_ID
 
 internal open class KotlinExpressionParsing(
     builder: SemanticWhitespaceAwareSyntaxBuilder,
@@ -285,12 +335,12 @@ internal open class KotlinExpressionParsing(
             parseOperationReference()
 
             val resultType: SyntaxElementType = when (KtTokens.getElementTypeId(operation)) {
-                KtTokens.AS_KEYWORD_ID, KtTokens.AS_SAFE_ID -> {
+                AS_KEYWORD_ID, AS_SAFE_ID -> {
                     kotlinParsing.parseTypeRefWithoutIntersectionsOrUnions()
                     minPrecedence = BinaryOperationPrecedence.AS
                     KtNodeTypes.BINARY_WITH_TYPE
                 }
-                KtTokens.IS_KEYWORD_ID, KtTokens.NOT_IS_ID -> {
+                IS_KEYWORD_ID, NOT_IS_ID -> {
                     kotlinParsing.parseTypeRefWithoutIntersectionsOrUnions()
                     // The handling of `is`, it doesn't parse RHS recursively and greedily.
                     // To prevent parsing of more prioritized operations next to `is` (for instance, INFIX, RANGE, and others),
@@ -474,11 +524,11 @@ internal open class KotlinExpressionParsing(
     private fun parseCallSuffix(): Boolean {
         if (!parseCallWithClosure()) { // do nothing if parsing of call with closure is successful
             when (tokenId) {
-                KtTokens.LPAR_ID -> {
+                LPAR_ID -> {
                     parseValueArgumentList()
                     parseCallWithClosure()
                 }
-                KtTokens.LT_ID -> {
+                LT_ID -> {
                     val typeArgumentList = mark()
                     if (kotlinParsing.tryParseTypeArgumentList(TYPE_ARGUMENT_LIST_STOPPERS)) {
                         typeArgumentList.done(KtNodeTypes.TYPE_ARGUMENT_LIST)
@@ -590,22 +640,22 @@ internal open class KotlinExpressionParsing(
         var ok = true
 
         when (tokenId) {
-            KtTokens.LPAR_ID -> parseParenthesizedExpression()
-            KtTokens.LBRACKET_ID -> parseCollectionLiteralExpression()
-            KtTokens.THIS_KEYWORD_ID -> parseThisExpression()
-            KtTokens.SUPER_KEYWORD_ID -> parseSuperExpression()
-            KtTokens.OBJECT_KEYWORD_ID -> parseObjectLiteral()
-            KtTokens.THROW_KEYWORD_ID -> parseThrow()
-            KtTokens.RETURN_KEYWORD_ID -> parseReturn()
-            KtTokens.CONTINUE_KEYWORD_ID -> parseJump(KtNodeTypes.CONTINUE)
-            KtTokens.BREAK_KEYWORD_ID -> parseJump(KtNodeTypes.BREAK)
-            KtTokens.IF_KEYWORD_ID -> parseIf()
-            KtTokens.WHEN_KEYWORD_ID -> parseWhen()
-            KtTokens.TRY_KEYWORD_ID -> parseTry()
-            KtTokens.FOR_KEYWORD_ID -> parseFor()
-            KtTokens.WHILE_KEYWORD_ID -> parseWhile()
-            KtTokens.DO_KEYWORD_ID -> parseDoWhile()
-            KtTokens.IDENTIFIER_ID -> {
+            LPAR_ID -> parseParenthesizedExpression()
+            LBRACKET_ID -> parseCollectionLiteralExpression()
+            THIS_KEYWORD_ID -> parseThisExpression()
+            SUPER_KEYWORD_ID -> parseSuperExpression()
+            OBJECT_KEYWORD_ID -> parseObjectLiteral()
+            THROW_KEYWORD_ID -> parseThrow()
+            RETURN_KEYWORD_ID -> parseReturn()
+            CONTINUE_KEYWORD_ID -> parseJump(KtNodeTypes.CONTINUE)
+            BREAK_KEYWORD_ID -> parseJump(KtNodeTypes.BREAK)
+            IF_KEYWORD_ID -> parseIf()
+            WHEN_KEYWORD_ID -> parseWhen()
+            TRY_KEYWORD_ID -> parseTry()
+            FOR_KEYWORD_ID -> parseFor()
+            WHILE_KEYWORD_ID -> parseWhile()
+            DO_KEYWORD_ID -> parseDoWhile()
+            IDENTIFIER_ID -> {
                 // Try to parse an anonymous function with context parameters
                 if (atWithRemap(KtTokens.CONTEXT_KEYWORD) && lookahead(1) === KtTokens.LPAR) {
                     if (parseLocalDeclaration(rollbackIfDefinitelyNotExpression = true, isScriptTopLevel = false)) {
@@ -617,23 +667,23 @@ internal open class KotlinExpressionParsing(
 
                 parseSimpleNameExpression()
             }
-            KtTokens.LBRACE_ID -> parseFunctionLiteral()
-            KtTokens.INTERPOLATION_PREFIX_ID,
-            KtTokens.OPEN_QUOTE_ID,
+            LBRACE_ID -> parseFunctionLiteral()
+            INTERPOLATION_PREFIX_ID,
+            OPEN_QUOTE_ID,
                 -> parseStringTemplate()
-            KtTokens.TRUE_KEYWORD_ID,
-            KtTokens.FALSE_KEYWORD_ID,
+            TRUE_KEYWORD_ID,
+            FALSE_KEYWORD_ID,
                 -> parseOneTokenExpression(KtNodeTypes.BOOLEAN_CONSTANT)
-            KtTokens.INTEGER_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.INTEGER_CONSTANT)
-            KtTokens.CHARACTER_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.CHARACTER_CONSTANT)
-            KtTokens.FLOAT_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.FLOAT_CONSTANT)
-            KtTokens.NULL_KEYWORD_ID -> parseOneTokenExpression(KtNodeTypes.NULL)
-            KtTokens.CLASS_KEYWORD_ID,
-            KtTokens.INTERFACE_KEYWORD_ID,
-            KtTokens.FUN_MODIFIER_ID,
-            KtTokens.VAL_KEYWORD_ID,
-            KtTokens.VAR_KEYWORD_ID,
-            KtTokens.TYPE_ALIAS_KEYWORD_ID,
+            INTEGER_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.INTEGER_CONSTANT)
+            CHARACTER_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.CHARACTER_CONSTANT)
+            FLOAT_LITERAL_ID -> parseOneTokenExpression(KtNodeTypes.FLOAT_CONSTANT)
+            NULL_KEYWORD_ID -> parseOneTokenExpression(KtNodeTypes.NULL)
+            CLASS_KEYWORD_ID,
+            INTERFACE_KEYWORD_ID,
+            FUN_MODIFIER_ID,
+            VAL_KEYWORD_ID,
+            VAR_KEYWORD_ID,
+            TYPE_ALIAS_KEYWORD_ID,
                 -> {
                 if (!parseLocalDeclaration(
                         rollbackIfDefinitelyNotExpression = builder.newlineBeforeCurrentToken(),
@@ -702,17 +752,17 @@ internal open class KotlinExpressionParsing(
      */
     private fun parseStringTemplateElement() {
         when (tokenId) {
-            KtTokens.REGULAR_STRING_PART_ID -> {
+            REGULAR_STRING_PART_ID -> {
                 val mark = mark()
                 advance() // REGULAR_STRING_PART
                 mark.done(KtNodeTypes.LITERAL_STRING_TEMPLATE_ENTRY)
             }
-            KtTokens.ESCAPE_SEQUENCE_ID -> {
+            ESCAPE_SEQUENCE_ID -> {
                 val mark = mark()
                 advance() // ESCAPE_SEQUENCE
                 mark.done(KtNodeTypes.ESCAPE_STRING_TEMPLATE_ENTRY)
             }
-            KtTokens.SHORT_TEMPLATE_ENTRY_START_ID -> {
+            SHORT_TEMPLATE_ENTRY_START_ID -> {
                 val entry = mark()
                 advance() // SHORT_TEMPLATE_ENTRY_START
 
@@ -736,7 +786,7 @@ internal open class KotlinExpressionParsing(
 
                 entry.done(KtNodeTypes.SHORT_STRING_TEMPLATE_ENTRY)
             }
-            KtTokens.LONG_TEMPLATE_ENTRY_START_ID -> {
+            LONG_TEMPLATE_ENTRY_START_ID -> {
                 val longTemplateEntry = mark()
 
                 advance() // LONG_TEMPLATE_ENTRY_START
@@ -894,8 +944,8 @@ internal open class KotlinExpressionParsing(
         val condition = mark()
         builder.disableNewlines()
         when (tokenId) {
-            KtTokens.IN_MODIFIER_ID,
-            KtTokens.NOT_IN_ID,
+            IN_MODIFIER_ID,
+            NOT_IN_ID,
                 -> {
                 val mark = mark()
                 advance() // IN_KEYWORD or NOT_IN
@@ -908,8 +958,8 @@ internal open class KotlinExpressionParsing(
                 }
                 condition.done(KtNodeTypes.WHEN_CONDITION_IN_RANGE)
             }
-            KtTokens.IS_KEYWORD_ID,
-            KtTokens.NOT_IS_ID,
+            IS_KEYWORD_ID,
+            NOT_IS_ID,
                 -> {
                 advance() // IS_KEYWORD or NOT_IS
 
@@ -920,10 +970,10 @@ internal open class KotlinExpressionParsing(
                 }
                 condition.done(KtNodeTypes.WHEN_CONDITION_IS_PATTERN)
             }
-            KtTokens.RBRACE_ID,
-            KtTokens.ELSE_KEYWORD_ID,
-            KtTokens.ARROW_ID,
-            KtTokens.DOT_ID,
+            RBRACE_ID,
+            ELSE_KEYWORD_ID,
+            ARROW_ID,
+            DOT_ID,
                 -> {
                 error("Expecting an expression, is-condition or in-condition")
                 condition.done(KtNodeTypes.WHEN_CONDITION_EXPRESSION)
@@ -938,7 +988,7 @@ internal open class KotlinExpressionParsing(
 
     private fun parseWhenEntryGuardOrSuggest() {
         when (tokenId) {
-            KtTokens.ANDAND_ID -> {
+            ANDAND_ID -> {
                 errorUntil(
                     "Unexpected '&&', use 'if' to introduce additional conditions; see https://kotl.in/guards-in-when",
                     syntaxElementTypeSetOf(
@@ -946,7 +996,7 @@ internal open class KotlinExpressionParsing(
                     )
                 )
             }
-            KtTokens.IF_KEYWORD_ID -> {
+            IF_KEYWORD_ID -> {
                 parseWhenEntryGuard()
             }
         }
@@ -1115,13 +1165,13 @@ internal open class KotlinExpressionParsing(
         var paramsFound = false
 
         when (tokenId) {
-            KtTokens.ARROW_ID -> {
+            ARROW_ID -> {
                 //   { -> ...}
                 mark().done(KtNodeTypes.VALUE_PARAMETER_LIST)
                 advance() // ARROW
                 paramsFound = true
             }
-            KtTokens.IDENTIFIER_ID, KtTokens.COLON_ID, KtTokens.LPAR_ID, KtTokens.LBRACKET_ID -> {
+            IDENTIFIER_ID, COLON_ID, LPAR_ID, LBRACKET_ID -> {
                 // Try to parse a simple name list followed by an ARROW
                 //   {a -> ...}
                 //   {a, b -> ...}
@@ -1196,10 +1246,10 @@ internal open class KotlinExpressionParsing(
             val parameter = mark()
 
             when (tokenId) {
-                KtTokens.COLON_ID -> {
+                COLON_ID -> {
                     error("Expecting parameter name")
                 }
-                KtTokens.LPAR_ID, KtTokens.LBRACKET_ID -> {
+                LPAR_ID, LBRACKET_ID -> {
                     val destructuringDeclaration = mark()
                     kotlinParsing.parseMultiDeclarationEntry(
                         TOKEN_SET_TO_FOLLOW_AFTER_DESTRUCTURING_DECLARATION_IN_LAMBDA,
@@ -1221,10 +1271,10 @@ internal open class KotlinExpressionParsing(
             parameter.done(KtNodeTypes.VALUE_PARAMETER)
 
             when (tokenId) {
-                KtTokens.ARROW_ID -> {
+                ARROW_ID -> {
                     break
                 }
-                KtTokens.COMMA_ID -> {
+                COMMA_ID -> {
                     advance() // COMMA
                 }
                 else -> {
@@ -1256,12 +1306,12 @@ internal open class KotlinExpressionParsing(
             }
 
             when (tokenId) {
-                KtTokens.SEMICOLON_ID -> {
+                SEMICOLON_ID -> {
                     while (at(KtTokens.SEMICOLON)) {
                         advance()
                     }
                 }
-                KtTokens.RBRACE_ID -> {
+                RBRACE_ID -> {
                     break
                 }
                 else -> {

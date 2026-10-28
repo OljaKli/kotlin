@@ -32,6 +32,18 @@ import org.jetbrains.kotlin.kmp.lexer.KtTokens.TRY_KEYWORD
 import org.jetbrains.kotlin.kmp.lexer.KtTokens.WHEN_KEYWORD
 import org.jetbrains.kotlin.kmp.lexer.KtTokens.WHILE_KEYWORD
 import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtTokens.CLASS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.EQ_ID
+import org.jetbrains.kotlin.syntax.KtTokens.FUN_MODIFIER_ID
+import org.jetbrains.kotlin.syntax.KtTokens.IDENTIFIER_ID
+import org.jetbrains.kotlin.syntax.KtTokens.INTERFACE_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACE_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LBRACKET_ID
+import org.jetbrains.kotlin.syntax.KtTokens.LPAR_ID
+import org.jetbrains.kotlin.syntax.KtTokens.OBJECT_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.TYPE_ALIAS_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.VAL_KEYWORD_ID
+import org.jetbrains.kotlin.syntax.KtTokens.VAR_KEYWORD_ID
 
 internal class KotlinParsing private constructor(builder: SemanticWhitespaceAwareSyntaxBuilder, isTopLevel: Boolean, isLazy: Boolean) :
     AbstractKotlinParsing(builder, isLazy) {
@@ -664,23 +676,23 @@ internal class KotlinParsing private constructor(builder: SemanticWhitespaceAwar
         declarationParsingMode: DeclarationParsingMode,
     ): SyntaxElementType? {
         when (tokenId) {
-            KtTokens.CLASS_KEYWORD_ID,
-            KtTokens.INTERFACE_KEYWORD_ID,
+            CLASS_KEYWORD_ID,
+            INTERFACE_KEYWORD_ID,
                 -> return parseClass(
                 detector.isEnumDetected, true
             )
-            KtTokens.FUN_MODIFIER_ID -> return parseFunction()
-            KtTokens.VAL_KEYWORD_ID,
-            KtTokens.VAR_KEYWORD_ID,
+            FUN_MODIFIER_ID -> return parseFunction()
+            VAL_KEYWORD_ID,
+            VAR_KEYWORD_ID,
                 -> return parseProperty(declarationParsingMode)
-            KtTokens.LPAR_ID if lookahead(1) in KtTokens.VAL_VAR -> return parseProperty(declarationParsingMode)
-            KtTokens.LBRACKET_ID if lookahead(1) in KtTokens.VAL_VAR -> return parseProperty(declarationParsingMode)
-            KtTokens.TYPE_ALIAS_KEYWORD_ID -> return parseTypeAlias()
-            KtTokens.OBJECT_KEYWORD_ID -> {
+            LPAR_ID if lookahead(1) in KtTokens.VAL_VAR -> return parseProperty(declarationParsingMode)
+            LBRACKET_ID if lookahead(1) in KtTokens.VAL_VAR -> return parseProperty(declarationParsingMode)
+            TYPE_ALIAS_KEYWORD_ID -> return parseTypeAlias()
+            OBJECT_KEYWORD_ID -> {
                 parseObject(nameParsingModeForObject, true)
                 return KtNodeTypes.OBJECT_DECLARATION
             }
-            KtTokens.IDENTIFIER_ID -> if (detector.isEnumDetected && declarationParsingMode.canBeEnumUsedAsSoftKeyword) {
+            IDENTIFIER_ID -> if (detector.isEnumDetected && declarationParsingMode.canBeEnumUsedAsSoftKeyword) {
                 return parseClass(enumClass = true, expectKindKeyword = false)
             }
         }
@@ -974,10 +986,10 @@ internal class KotlinParsing private constructor(builder: SemanticWhitespaceAwar
             }
 
             return when (KtTokens.getElementTypeId(tokenToMatch)) {
-                KtTokens.IDENTIFIER_ID -> {
+                IDENTIFIER_ID -> {
                     parseAnnotation(mode)
                 }
-                KtTokens.LBRACKET_ID -> {
+                LBRACKET_ID -> {
                     parseAnnotationList(mode)
                 }
                 else -> {
@@ -2105,10 +2117,10 @@ internal class KotlinParsing private constructor(builder: SemanticWhitespaceAwar
      */
     private fun parseFunctionBody() {
         when (tokenId) {
-            KtTokens.LBRACE_ID -> {
+            LBRACE_ID -> {
                 parseBlock()
             }
-            KtTokens.EQ_ID -> {
+            EQ_ID -> {
                 advance() // EQ
                 expressionParsing.parseExpression()
                 consumeIfSemicolon()

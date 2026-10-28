@@ -142,15 +142,15 @@ import org.jetbrains.kotlin.fir.types.builder.buildUserTypeRef
 import org.jetbrains.kotlin.fir.types.impl.FirImplicitTypeRefImplWithoutSource
 import org.jetbrains.kotlin.fir.types.impl.FirQualifierPartImpl
 import org.jetbrains.kotlin.fir.types.impl.FirTypeArgumentListImpl
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
-import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
-import org.jetbrains.kotlin.kmp.utils.SyntaxElementTypesWithIds
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.NameUtils
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.name.StandardClassIds
+import org.jetbrains.kotlin.syntax.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtTokens
+import org.jetbrains.kotlin.syntax.NO_ID
 import org.jetbrains.kotlin.utils.addToStdlib.runIf
 import org.jetbrains.kotlin.utils.addToStdlib.runUnless
 import org.jetbrains.kotlin.utils.addToStdlib.shouldNotBeCalled
@@ -1831,7 +1831,7 @@ class TreeRawFirDeclarationBuilderProxy<Node : Any, Type : Any>(
         // which `forEachChildren` skips
         if (entries.isEmpty()) {
             for (child in node.getChildren()) {
-                if (child.toTokenId() != SyntaxElementTypesWithIds.NO_ID) continue
+                if (child.toTokenId() != NO_ID) continue
                 for (errorChild in child.getChildren()) {
                     when (errorChild.toTokenId()) {
                         KtTokens.LBRACKET_ID -> hasSquareBrackets = true
@@ -2675,7 +2675,7 @@ class TreeRawFirDeclarationBuilderProxy<Node : Any, Type : Any>(
                 }
                 KtNodeTypes.INTERSECTION_TYPE_ID -> firType = convertIntersectionType(typeRefSource, it, false)
                 KtNodeTypes.UNION_TYPE_ID -> firType = convertUnionType(typeRefSource, it, false)
-                KtNodeTypes.CONTEXT_PARAMETER_LIST_ID, SyntaxElementTypesWithIds.NO_ID -> firType =
+                KtNodeTypes.CONTEXT_PARAMETER_LIST_ID, NO_ID -> firType =
                     buildErrorTypeRef {
                         source = typeRefSource
                         diagnostic = ConeSyntaxDiagnostic("Unwrapped type is null")

@@ -5,8 +5,8 @@
 
 package org.jetbrains.kotlin.fir.analysis
 
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
-import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtTokens
 import org.jetbrains.kotlin.utils.addToStdlib.popLast
 
 inline fun <T> isCallTheFirstStatement(

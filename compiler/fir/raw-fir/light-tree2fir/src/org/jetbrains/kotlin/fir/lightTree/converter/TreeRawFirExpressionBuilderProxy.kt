@@ -41,12 +41,12 @@ import org.jetbrains.kotlin.fir.types.FirTypeProjection
 import org.jetbrains.kotlin.fir.types.FirTypeRef
 import org.jetbrains.kotlin.fir.types.builder.buildErrorTypeRef
 import org.jetbrains.kotlin.fir.types.impl.FirImplicitTypeRefImplWithoutSource
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
-import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
-import org.jetbrains.kotlin.kmp.utils.SyntaxElementTypesWithIds
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.name.StandardClassIds
+import org.jetbrains.kotlin.syntax.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtTokens
+import org.jetbrains.kotlin.syntax.NO_ID
 import org.jetbrains.kotlin.util.OperatorNameConventions
 import org.jetbrains.kotlin.utils.addToStdlib.runIf
 
@@ -706,7 +706,7 @@ class TreeRawFirExpressionBuilderProxy<Node : Any, Type : Any>(
 
                 // In invalid code like `::foo(args)`, the argument list is parsed
                 // inside an ERROR_ELEMENT child of the callable reference expression
-                SyntaxElementTypesWithIds.NO_ID -> {
+                NO_ID -> {
                     for (errorChild in child.getChildren()) {
                         if (errorChild.toTokenId() == KtNodeTypes.VALUE_ARGUMENT_LIST_ID) {
                             errorArgumentListNode = errorChild
@@ -760,7 +760,7 @@ class TreeRawFirExpressionBuilderProxy<Node : Any, Type : Any>(
                     isSelector = true
                 }
                 else -> {
-                    val isEffectiveSelector = isSelector && tokenType != SyntaxElementTypesWithIds.NO_ID
+                    val isEffectiveSelector = isSelector && tokenType != NO_ID
                     val firExpression =
                         getAsFirExpression<FirExpression>(it, "Incorrect ${if (isEffectiveSelector) "selector" else "receiver"} expression")
                     if (isEffectiveSelector) {
@@ -839,7 +839,7 @@ class TreeRawFirExpressionBuilderProxy<Node : Any, Type : Any>(
                     KtNodeTypes.SUPER_EXPRESSION_ID -> {
                         superNode = node
                     }
-                    KtNodeTypes.PARENTHESIZED_ID -> if (node.toTokenId() != SyntaxElementTypesWithIds.NO_ID) {
+                    KtNodeTypes.PARENTHESIZED_ID -> if (node.toTokenId() != NO_ID) {
                         additionalArgument = getAsFirExpression(
                             node.getExpressionInParentheses(),
                             "Incorrect invoke receiver",
@@ -853,7 +853,7 @@ class TreeRawFirExpressionBuilderProxy<Node : Any, Type : Any>(
                         hasArguments = true
                         valueArguments += node
                     }
-                    else -> if (node.toTokenId() != SyntaxElementTypesWithIds.NO_ID) {
+                    else -> if (node.toTokenId() != NO_ID) {
                         additionalArgument = getAsFirExpression(node, "Incorrect invoke receiver")
                     }
                 }

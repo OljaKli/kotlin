@@ -9,162 +9,133 @@ import com.intellij.platform.syntax.SyntaxElementType
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.kotlin.kmp.lexer.KtTokens
 import org.jetbrains.kotlin.kmp.utils.SyntaxElementTypesWithIds
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ANNOTATED_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ANNOTATION_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ANNOTATION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ANNOTATION_TARGET_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ARRAY_ACCESS_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BACKING_FIELD_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BINARY_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BINARY_WITH_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BLOCK_CODE_FRAGMENT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BLOCK_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BODY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BOOLEAN_CONSTANT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.BREAK_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CALLABLE_REFERENCE_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CALL_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CATCH_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CHARACTER_CONSTANT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CLASS_BODY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CLASS_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CLASS_INITIALIZER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CLASS_LITERAL_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.COLLECTION_LITERAL_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.COMPANION_BLOCK_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONDITION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONSTRUCTOR_CALLEE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONSTRUCTOR_DELEGATION_CALL_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONSTRUCTOR_DELEGATION_REFERENCE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONTEXT_PARAMETER_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONTEXT_RECEIVER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONTINUE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONTRACT_EFFECT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.CONTRACT_EFFECT_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DELEGATED_SUPER_TYPE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DESTRUCTURING_DECLARATION_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DESTRUCTURING_DECLARATION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DOT_QUALIFIED_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DO_WHILE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.DYNAMIC_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ELSE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ENUM_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ENUM_ENTRY_SUPERCLASS_REFERENCE_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ERROR_SAFE_ACCESS_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.ESCAPE_STRING_TEMPLATE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.EXPRESSION_CODE_FRAGMENT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FILE_ANNOTATION_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FILE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FINALLY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FLOAT_CONSTANT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FOR_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FUNCTION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FUNCTION_LITERAL_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FUNCTION_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.FUNCTION_TYPE_RECEIVER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.IF_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.IMPORT_ALIAS_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.IMPORT_DIRECTIVE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.IMPORT_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.INDICES_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.INITIALIZER_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.INTEGER_CONSTANT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.INTERSECTION_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.IS_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LABELED_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LABEL_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LABEL_QUALIFIER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LAMBDA_ARGUMENT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LAMBDA_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LITERAL_STRING_TEMPLATE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LONG_STRING_TEMPLATE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.LOOP_RANGE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.MODIFIER_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.NULLABLE_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.NULL_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.OBJECT_DECLARATION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.OBJECT_LITERAL_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.OPERATION_REFERENCE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PACKAGE_DIRECTIVE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PARENTHESIZED_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.POSTFIX_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PREFIX_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PRIMARY_CONSTRUCTOR_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PROPERTY_ACCESSOR_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PROPERTY_DELEGATE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.PROPERTY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.REFERENCE_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.RETURN_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SAFE_ACCESS_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SCRIPT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SCRIPT_INITIALIZER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SECONDARY_CONSTRUCTOR_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SHORT_STRING_TEMPLATE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.STRING_INTERPOLATION_PREFIX_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.STRING_TEMPLATE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SUPER_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SUPER_TYPE_CALL_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SUPER_TYPE_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.SUPER_TYPE_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.THEN_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.THIS_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.THROW_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPEALIAS_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_ARGUMENT_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_CODE_FRAGMENT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_CONSTRAINT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_CONSTRAINT_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_PARAMETER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_PARAMETER_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_PROJECTION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.TYPE_REFERENCE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.UNION_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.USER_TYPE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.VALUE_ARGUMENT_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.VALUE_ARGUMENT_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.VALUE_ARGUMENT_NAME_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.VALUE_PARAMETER_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.VALUE_PARAMETER_LIST_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_CONDITION_EXPRESSION_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_CONDITION_IN_RANGE_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_CONDITION_IS_PATTERN_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_ENTRY_GUARD_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_ENTRY_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHEN_ID
+import org.jetbrains.kotlin.syntax.KtNodeTypes.WHILE_ID
 
 @ApiStatus.Experimental
 object KtNodeTypes : SyntaxElementTypesWithIds() {
-    /**
-     * The following constants are needed to force the compiler to generate a fast table / lookup switch on when expressions with multiple branches.
-     * They should match corresponding element types.
-     * As an example, see [SyntaxElementTypesWithIds.getElementTypeId] usages.
-     */
-    const val FILE_ID: Int = KtTokens.WHITE_SPACE_ID + 1
-
-    const val CLASS_ID: Int = FILE_ID + 1
-    const val FUNCTION_ID: Int = CLASS_ID + 1
-    const val PROPERTY_ID: Int = FUNCTION_ID + 1
-    const val DESTRUCTURING_DECLARATION_ID: Int = PROPERTY_ID + 1
-    const val DESTRUCTURING_DECLARATION_ENTRY_ID: Int = DESTRUCTURING_DECLARATION_ID + 1
-
-    const val OBJECT_DECLARATION_ID: Int = DESTRUCTURING_DECLARATION_ENTRY_ID + 1
-    const val TYPEALIAS_ID: Int = OBJECT_DECLARATION_ID + 1
-    const val COMPANION_BLOCK_ID: Int = TYPEALIAS_ID + 1
-
-    const val ENUM_ENTRY_ID: Int = COMPANION_BLOCK_ID + 1
-    const val CLASS_INITIALIZER_ID: Int = ENUM_ENTRY_ID + 1
-    const val SCRIPT_INITIALIZER_ID: Int = CLASS_INITIALIZER_ID + 1
-    const val SECONDARY_CONSTRUCTOR_ID: Int = SCRIPT_INITIALIZER_ID + 1
-    const val PRIMARY_CONSTRUCTOR_ID: Int = SECONDARY_CONSTRUCTOR_ID + 1
-    const val CONTEXT_RECEIVER_ID: Int = PRIMARY_CONSTRUCTOR_ID + 1
-    const val CONTEXT_PARAMETER_LIST_ID: Int = CONTEXT_RECEIVER_ID + 1
-    const val TYPE_PARAMETER_LIST_ID: Int = CONTEXT_PARAMETER_LIST_ID + 1
-    const val TYPE_PARAMETER_ID: Int = TYPE_PARAMETER_LIST_ID + 1
-    const val SUPER_TYPE_LIST_ID: Int = TYPE_PARAMETER_ID + 1
-    const val DELEGATED_SUPER_TYPE_ENTRY_ID: Int = SUPER_TYPE_LIST_ID + 1
-    const val SUPER_TYPE_CALL_ENTRY_ID: Int = DELEGATED_SUPER_TYPE_ENTRY_ID + 1
-    const val SUPER_TYPE_ENTRY_ID: Int = SUPER_TYPE_CALL_ENTRY_ID + 1
-    const val PROPERTY_DELEGATE_ID: Int = SUPER_TYPE_ENTRY_ID + 1
-    const val CONSTRUCTOR_CALLEE_ID: Int = PROPERTY_DELEGATE_ID + 1
-    const val VALUE_PARAMETER_LIST_ID: Int = CONSTRUCTOR_CALLEE_ID + 1
-    const val VALUE_PARAMETER_ID: Int = VALUE_PARAMETER_LIST_ID + 1
-
-    const val CLASS_BODY_ID: Int = VALUE_PARAMETER_ID + 1
-    const val IMPORT_LIST_ID: Int = CLASS_BODY_ID + 1
-    const val FILE_ANNOTATION_LIST_ID: Int = IMPORT_LIST_ID + 1
-    const val IMPORT_DIRECTIVE_ID: Int = FILE_ANNOTATION_LIST_ID + 1
-    const val IMPORT_ALIAS_ID: Int = IMPORT_DIRECTIVE_ID + 1
-    const val MODIFIER_LIST_ID: Int = IMPORT_ALIAS_ID + 1
-    const val ANNOTATION_ID: Int = MODIFIER_LIST_ID + 1
-    const val ANNOTATION_ENTRY_ID: Int = ANNOTATION_ID + 1
-    const val ANNOTATION_TARGET_ID: Int = ANNOTATION_ENTRY_ID + 1
-
-    const val TYPE_ARGUMENT_LIST_ID: Int = ANNOTATION_TARGET_ID + 1
-    const val VALUE_ARGUMENT_LIST_ID: Int = TYPE_ARGUMENT_LIST_ID + 1
-    const val VALUE_ARGUMENT_ID: Int = VALUE_ARGUMENT_LIST_ID + 1
-    const val CONTRACT_EFFECT_LIST_ID: Int = VALUE_ARGUMENT_ID + 1
-    const val CONTRACT_EFFECT_ID: Int = CONTRACT_EFFECT_LIST_ID + 1
-    const val LAMBDA_ARGUMENT_ID: Int = CONTRACT_EFFECT_ID + 1
-    const val VALUE_ARGUMENT_NAME_ID: Int = LAMBDA_ARGUMENT_ID + 1
-    const val TYPE_REFERENCE_ID: Int = VALUE_ARGUMENT_NAME_ID + 1
-
-    const val USER_TYPE_ID: Int = TYPE_REFERENCE_ID + 1
-    const val DYNAMIC_TYPE_ID: Int = USER_TYPE_ID + 1
-    const val FUNCTION_TYPE_ID: Int = DYNAMIC_TYPE_ID + 1
-    const val FUNCTION_TYPE_RECEIVER_ID: Int = FUNCTION_TYPE_ID + 1
-    const val NULLABLE_TYPE_ID: Int = FUNCTION_TYPE_RECEIVER_ID + 1
-    const val INTERSECTION_TYPE_ID: Int = NULLABLE_TYPE_ID + 1
-    const val UNION_TYPE_ID: Int = INTERSECTION_TYPE_ID + 1
-    const val TYPE_PROJECTION_ID: Int = UNION_TYPE_ID + 1
-
-    const val PROPERTY_ACCESSOR_ID: Int = TYPE_PROJECTION_ID + 1
-    const val BACKING_FIELD_ID: Int = PROPERTY_ACCESSOR_ID + 1
-    const val INITIALIZER_LIST_ID: Int = BACKING_FIELD_ID + 1
-    const val TYPE_CONSTRAINT_LIST_ID: Int = INITIALIZER_LIST_ID + 1
-    const val TYPE_CONSTRAINT_ID: Int = TYPE_CONSTRAINT_LIST_ID + 1
-
-    const val CONSTRUCTOR_DELEGATION_CALL_ID: Int = TYPE_CONSTRAINT_ID + 1
-    const val CONSTRUCTOR_DELEGATION_REFERENCE_ID: Int = CONSTRUCTOR_DELEGATION_CALL_ID + 1
-
-    const val NULL_ID: Int = CONSTRUCTOR_DELEGATION_REFERENCE_ID + 1
-    const val BOOLEAN_CONSTANT_ID: Int = NULL_ID + 1
-    const val FLOAT_CONSTANT_ID: Int = BOOLEAN_CONSTANT_ID + 1
-    const val CHARACTER_CONSTANT_ID: Int = FLOAT_CONSTANT_ID + 1
-    const val INTEGER_CONSTANT_ID: Int = CHARACTER_CONSTANT_ID + 1
-
-    const val STRING_TEMPLATE_ID: Int = INTEGER_CONSTANT_ID + 1
-    const val LONG_STRING_TEMPLATE_ENTRY_ID: Int = STRING_TEMPLATE_ID + 1
-    const val SHORT_STRING_TEMPLATE_ENTRY_ID: Int = LONG_STRING_TEMPLATE_ENTRY_ID + 1
-    const val LITERAL_STRING_TEMPLATE_ENTRY_ID: Int = SHORT_STRING_TEMPLATE_ENTRY_ID + 1
-    const val ESCAPE_STRING_TEMPLATE_ENTRY_ID: Int = LITERAL_STRING_TEMPLATE_ENTRY_ID + 1
-    const val STRING_INTERPOLATION_PREFIX_ID: Int = ESCAPE_STRING_TEMPLATE_ENTRY_ID + 1
-
-    const val PARENTHESIZED_ID: Int = STRING_INTERPOLATION_PREFIX_ID + 1
-    const val RETURN_ID: Int = PARENTHESIZED_ID + 1
-    const val THROW_ID: Int = RETURN_ID + 1
-    const val CONTINUE_ID: Int = THROW_ID + 1
-    const val BREAK_ID: Int = CONTINUE_ID + 1
-    const val IF_ID: Int = BREAK_ID + 1
-    const val CONDITION_ID: Int = IF_ID + 1
-    const val THEN_ID: Int = CONDITION_ID + 1
-    const val ELSE_ID: Int = THEN_ID + 1
-    const val TRY_ID: Int = ELSE_ID + 1
-    const val CATCH_ID: Int = TRY_ID + 1
-    const val FINALLY_ID: Int = CATCH_ID + 1
-    const val FOR_ID: Int = FINALLY_ID + 1
-    const val WHILE_ID: Int = FOR_ID + 1
-    const val DO_WHILE_ID: Int = WHILE_ID + 1
-    const val LOOP_RANGE_ID: Int = DO_WHILE_ID + 1
-    const val BODY_ID: Int = LOOP_RANGE_ID + 1
-
-    const val BLOCK_ID: Int = BODY_ID + 1
-
-    const val LAMBDA_EXPRESSION_ID: Int = BLOCK_ID + 1
-
-    const val FUNCTION_LITERAL_ID: Int = LAMBDA_EXPRESSION_ID + 1
-    const val ANNOTATED_EXPRESSION_ID: Int = FUNCTION_LITERAL_ID + 1
-
-    const val REFERENCE_EXPRESSION_ID: Int = ANNOTATED_EXPRESSION_ID + 1
-    const val ENUM_ENTRY_SUPERCLASS_REFERENCE_EXPRESSION_ID: Int = REFERENCE_EXPRESSION_ID + 1
-    const val OPERATION_REFERENCE_ID: Int = ENUM_ENTRY_SUPERCLASS_REFERENCE_EXPRESSION_ID + 1
-    const val LABEL_ID: Int = OPERATION_REFERENCE_ID + 1
-
-    const val LABEL_QUALIFIER_ID: Int = LABEL_ID + 1
-
-    const val THIS_EXPRESSION_ID: Int = LABEL_QUALIFIER_ID + 1
-    const val SUPER_EXPRESSION_ID: Int = THIS_EXPRESSION_ID + 1
-    const val BINARY_EXPRESSION_ID: Int = SUPER_EXPRESSION_ID + 1
-    const val BINARY_WITH_TYPE_ID: Int = BINARY_EXPRESSION_ID + 1
-    const val IS_EXPRESSION_ID: Int = BINARY_WITH_TYPE_ID + 1
-    const val PREFIX_EXPRESSION_ID: Int = IS_EXPRESSION_ID + 1
-    const val POSTFIX_EXPRESSION_ID: Int = PREFIX_EXPRESSION_ID + 1
-    const val LABELED_EXPRESSION_ID: Int = POSTFIX_EXPRESSION_ID + 1
-    const val CALL_EXPRESSION_ID: Int = LABELED_EXPRESSION_ID + 1
-    const val ARRAY_ACCESS_EXPRESSION_ID: Int = CALL_EXPRESSION_ID + 1
-    const val INDICES_ID: Int = ARRAY_ACCESS_EXPRESSION_ID + 1
-    const val DOT_QUALIFIED_EXPRESSION_ID: Int = INDICES_ID + 1
-    const val CALLABLE_REFERENCE_EXPRESSION_ID: Int = DOT_QUALIFIED_EXPRESSION_ID + 1
-    const val CLASS_LITERAL_EXPRESSION_ID: Int = CALLABLE_REFERENCE_EXPRESSION_ID + 1
-    const val SAFE_ACCESS_EXPRESSION_ID: Int = CLASS_LITERAL_EXPRESSION_ID + 1
-    const val ERROR_SAFE_ACCESS_EXPRESSION_ID: Int = SAFE_ACCESS_EXPRESSION_ID + 1
-
-    const val OBJECT_LITERAL_ID: Int = ERROR_SAFE_ACCESS_EXPRESSION_ID + 1
-
-    const val WHEN_ID: Int = OBJECT_LITERAL_ID + 1
-    const val WHEN_ENTRY_ID: Int = WHEN_ID + 1
-    const val WHEN_ENTRY_GUARD_ID: Int = WHEN_ENTRY_ID + 1
-
-    const val WHEN_CONDITION_IN_RANGE_ID: Int = WHEN_ENTRY_GUARD_ID + 1
-    const val WHEN_CONDITION_IS_PATTERN_ID: Int = WHEN_CONDITION_IN_RANGE_ID + 1
-    const val WHEN_CONDITION_EXPRESSION_ID: Int = WHEN_CONDITION_IS_PATTERN_ID + 1
-
-    const val COLLECTION_LITERAL_EXPRESSION_ID: Int = WHEN_CONDITION_EXPRESSION_ID + 1
-
-    const val PACKAGE_DIRECTIVE_ID: Int = COLLECTION_LITERAL_EXPRESSION_ID + 1
-    const val SCRIPT_ID: Int = PACKAGE_DIRECTIVE_ID + 1
-
-    const val TYPE_CODE_FRAGMENT_ID: Int = SCRIPT_ID + 1
-    const val EXPRESSION_CODE_FRAGMENT_ID: Int = TYPE_CODE_FRAGMENT_ID + 1
-    const val BLOCK_CODE_FRAGMENT_ID: Int = EXPRESSION_CODE_FRAGMENT_ID + 1
-
     val FILE: SyntaxElementType = register(FILE_ID, "kotlin.FILE")
 
     // Start of stub element types

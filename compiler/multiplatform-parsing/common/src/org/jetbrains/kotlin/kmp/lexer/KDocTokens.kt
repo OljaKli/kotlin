@@ -8,22 +8,20 @@ package org.jetbrains.kotlin.kmp.lexer
 import com.intellij.platform.syntax.SyntaxElementType
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.kotlin.kmp.utils.SyntaxElementTypesWithIds
+import org.jetbrains.kotlin.syntax.KDocTokens.CODE_BLOCK_TEXT_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.CODE_SPAN_TEXT_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.END_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.KDOC_LPAR_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.KDOC_RPAR_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.LEADING_ASTERISK_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.MARKDOWN_ESCAPED_CHAR_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.MARKDOWN_LINK_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.START_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.TAG_NAME_ID
+import org.jetbrains.kotlin.syntax.KDocTokens.TEXT_ID
 
 @ApiStatus.Experimental
 object KDocTokens : SyntaxElementTypesWithIds() {
-    const val START_ID: Int = NO_ID + 1
-    const val END_ID: Int = START_ID + 1
-    const val LEADING_ASTERISK_ID: Int = END_ID + 1
-    const val TEXT_ID: Int = LEADING_ASTERISK_ID + 1
-    const val CODE_BLOCK_TEXT_ID: Int = TEXT_ID + 1
-    const val TAG_NAME_ID: Int = CODE_BLOCK_TEXT_ID + 1
-    const val MARKDOWN_LINK_ID: Int = TAG_NAME_ID + 1
-    const val MARKDOWN_ESCAPED_CHAR_ID: Int = MARKDOWN_LINK_ID + 1
-    const val KDOC_LPAR_ID: Int = MARKDOWN_ESCAPED_CHAR_ID + 1
-    const val KDOC_RPAR_ID: Int = KDOC_LPAR_ID + 1
-    const val CODE_SPAN_TEXT_ID: Int = KDOC_RPAR_ID + 1
-    // Remember to update the first ID constant in `KtTokens` after adding a new token
-
     val START: SyntaxElementType = register(START_ID, "KDOC_START")
     val END: SyntaxElementType = register(END_ID, "KDOC_END")
     val LEADING_ASTERISK: SyntaxElementType = register(LEADING_ASTERISK_ID, "KDOC_LEADING_ASTERISK")

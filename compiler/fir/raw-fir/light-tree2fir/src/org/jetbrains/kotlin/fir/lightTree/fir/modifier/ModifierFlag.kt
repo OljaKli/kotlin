@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.fir.lightTree.fir.modifier
 
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
+import org.jetbrains.kotlin.syntax.KtTokens
 
 enum class ModifierFlag(val value: Long) {
     NONE(0L),

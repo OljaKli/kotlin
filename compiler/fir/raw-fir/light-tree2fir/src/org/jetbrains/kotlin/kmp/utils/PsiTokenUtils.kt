@@ -7,26 +7,26 @@ package org.jetbrains.kotlin.kmp.utils
 
 import com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.kmp.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtToken
+import org.jetbrains.kotlin.syntax.KtTokens
 
 /**
  * @receiver Some of Kotlin-based element types
  * @return Same integer ID as the corresponding [com.intellij.platform.syntax.SyntaxElementType] has.
- * If the element type is not Kotlin-based, the result is [org.jetbrains.kotlin.lexer.KtTokens.INVALID_Id].
+ * If the element type is not Kotlin-based, the result is [org.jetbrains.kotlin.syntax.NO_ID].
  */
 fun IElementType.kmpId(): Int =
     when {
         this is KtToken -> tokenId
         index < indexToId.size -> indexToId[index.toInt()]
-        else -> org.jetbrains.kotlin.lexer.KtTokens.INVALID_Id
+        else -> org.jetbrains.kotlin.syntax.NO_ID
     }
 
 private val indexToId: IntArray = run {
     val indexToIdMap = mutableMapOf<Short, Int>()
 
     var maxIndex: Short = 0
-    var id = org.jetbrains.kotlin.kmp.parser.KtNodeTypes.FILE_ID
+    var id = org.jetbrains.kotlin.syntax.KtNodeTypes.FILE_ID
     KtNodeTypes::class.java.declaredFields.forEach {
         if (it.isAnnotationPresent(java.lang.Deprecated::class.java)) return@forEach
         val index = (it.get(null) as IElementType).index

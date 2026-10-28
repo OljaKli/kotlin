@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.fir.analysis
 
-import org.jetbrains.kotlin.kmp.parser.KtNodeTypes
+import org.jetbrains.kotlin.syntax.KtNodeTypes
 
 
 fun Int.isExpression(): Boolean = when (this) {

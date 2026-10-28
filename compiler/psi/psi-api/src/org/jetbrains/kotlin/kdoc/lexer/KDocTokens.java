@@ -21,40 +21,29 @@ import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.KotlinElementTypeProvider;
 
+import static org.jetbrains.kotlin.syntax.KDocTokens.*;
+
 public interface KDocTokens {
     @NotNull ILazyParseableElementType KDOC = KotlinElementTypeProvider.getInstance().getKdocType();
 
-    int START_Id = 1;
-    int END_Id = START_Id + 1;
-    int LEADING_ASTERISK_Id = END_Id + 1;
-    int TEXT_Id = LEADING_ASTERISK_Id + 1;
-    int CODE_BLOCK_TEXT_Id = TEXT_Id + 1;
-    int TAG_NAME_Id = CODE_BLOCK_TEXT_Id + 1;
-    int MARKDOWN_ESCAPED_CHAR_Id = TAG_NAME_Id + 1;
-    @Deprecated
-    int MARKDOWN_INLINE_LINK_Id = MARKDOWN_ESCAPED_CHAR_Id + 1;
-    int KDOC_LPAR_Id= MARKDOWN_INLINE_LINK_Id + 1;
-    int KDOC_RPAR_Id = KDOC_LPAR_Id + 1;
-    int CODE_SPAN_TEXT_Id = KDOC_RPAR_Id + 1;
+    @NotNull KDocToken START                 = new KDocToken("KDOC_START", START_ID);
+    @NotNull KDocToken END                   = new KDocToken("KDOC_END", END_ID);
+    @NotNull KDocToken LEADING_ASTERISK      = new KDocToken("KDOC_LEADING_ASTERISK", LEADING_ASTERISK_ID);
 
-    @NotNull KDocToken START                 = new KDocToken("KDOC_START", START_Id);
-    @NotNull KDocToken END                   = new KDocToken("KDOC_END", END_Id);
-    @NotNull KDocToken LEADING_ASTERISK      = new KDocToken("KDOC_LEADING_ASTERISK", LEADING_ASTERISK_Id);
+    @NotNull KDocToken TEXT                  = new KDocToken("KDOC_TEXT", TEXT_ID);
+    @NotNull KDocToken CODE_BLOCK_TEXT       = new KDocToken("KDOC_CODE_BLOCK_TEXT", CODE_BLOCK_TEXT_ID);
+    @NotNull KDocToken CODE_SPAN_TEXT       = new KDocToken("KDOC_CODE_SPAN_TEXT", CODE_SPAN_TEXT_ID);
 
-    @NotNull KDocToken TEXT                  = new KDocToken("KDOC_TEXT", TEXT_Id);
-    @NotNull KDocToken CODE_BLOCK_TEXT       = new KDocToken("KDOC_CODE_BLOCK_TEXT", CODE_BLOCK_TEXT_Id);
-    @NotNull KDocToken CODE_SPAN_TEXT       = new KDocToken("KDOC_CODE_SPAN_TEXT", CODE_SPAN_TEXT_Id);
-
-    @NotNull KDocToken TAG_NAME              = new KDocToken("KDOC_TAG_NAME", TAG_NAME_Id);
+    @NotNull KDocToken TAG_NAME              = new KDocToken("KDOC_TAG_NAME", TAG_NAME_ID);
 
     @NotNull ILazyParseableElementType MARKDOWN_LINK = KotlinElementTypeProvider.getInstance().getKdocMarkdownLinkType();
 
-    @NotNull KDocToken KDOC_LPAR = new KDocToken("KDOC_LPAR", KDOC_LPAR_Id);
-    @NotNull KDocToken KDOC_RPAR = new KDocToken("KDOC_RPAR", KDOC_RPAR_Id);
+    @NotNull KDocToken KDOC_LPAR = new KDocToken("KDOC_LPAR", KDOC_LPAR_ID);
+    @NotNull KDocToken KDOC_RPAR = new KDocToken("KDOC_RPAR", KDOC_RPAR_ID);
 
-    @NotNull KDocToken MARKDOWN_ESCAPED_CHAR = new KDocToken("KDOC_MARKDOWN_ESCAPED_CHAR", MARKDOWN_ESCAPED_CHAR_Id);
+    @NotNull KDocToken MARKDOWN_ESCAPED_CHAR = new KDocToken("KDOC_MARKDOWN_ESCAPED_CHAR", MARKDOWN_ESCAPED_CHAR_ID);
     @Deprecated
-    @NotNull KDocToken MARKDOWN_INLINE_LINK = new KDocToken("KDOC_MARKDOWN_INLINE_LINK", MARKDOWN_INLINE_LINK_Id);
+    @NotNull KDocToken MARKDOWN_INLINE_LINK = new KDocToken("KDOC_MARKDOWN_INLINE_LINK", MARKDOWN_LINK_ID);
     @SuppressWarnings("unused")
     @NotNull TokenSet KDOC_HIGHLIGHT_TOKENS = TokenSet.create(START, END, LEADING_ASTERISK, TEXT, CODE_BLOCK_TEXT, CODE_SPAN_TEXT, MARKDOWN_LINK, MARKDOWN_ESCAPED_CHAR, MARKDOWN_INLINE_LINK, KDOC_LPAR, KDOC_RPAR);
     @NotNull TokenSet CONTENT_TOKENS = TokenSet.create(TEXT, CODE_BLOCK_TEXT, CODE_SPAN_TEXT, TAG_NAME, MARKDOWN_LINK, MARKDOWN_ESCAPED_CHAR, MARKDOWN_INLINE_LINK, KDOC_LPAR, KDOC_RPAR);
