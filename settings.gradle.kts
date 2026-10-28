@@ -912,6 +912,11 @@ project(":tools:kotlinp").projectDir = File("$rootDir/libraries/tools/kotlinp")
 project(":tools:kotlinp-jvm").projectDir = File("$rootDir/libraries/tools/kotlinp/jvm")
 project(":tools:kotlinp-klib").projectDir = File("$rootDir/libraries/tools/kotlinp/klib")
 project(":tools:stats-analyser").projectDir = File("$rootDir/libraries/tools/stats-analyser")
+
+// Kotlin Build Tools libraries (build-tools/libraries/AGENTS.md); include libraries below the projectDir line
+include(":kotlin-build-tools")
+project(":kotlin-build-tools").projectDir = File("$rootDir/build-tools/libraries")
+
 project(":kotlin-build-tools-enum-compat").projectDir = File("$rootDir/libraries/tools/kotlin-build-tools-enum-compat")
 project(":kotlin-gradle-compiler-types").projectDir = File("$rootDir/libraries/tools/kotlin-gradle-compiler-types")
 project(":kotlin-gradle-plugin-api").projectDir = File("$rootDir/libraries/tools/kotlin-gradle-plugin-api")
