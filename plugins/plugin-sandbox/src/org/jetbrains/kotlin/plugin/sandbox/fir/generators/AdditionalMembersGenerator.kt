@@ -100,6 +100,9 @@ class AdditionalMembersGenerator(session: FirSession) : FirDeclarationGeneration
     }
 
     override fun getCallableNamesForClass(classSymbol: FirClassSymbol<*>, context: MemberGenerationContext): Set<Name> {
+        // Validate 'getCallableNamesForClass()' is always called after SUPER_TYPES phase. (KT-84928)
+        classSymbol.resolvedSuperTypes
+
         return when {
             classSymbol in matchedClasses -> setOf(MATERIALIZE_NAME, ID_WITH_DEFAULT_NAME)
             classSymbol.classId in nestedClassIds -> setOf(SpecialNames.INIT)
