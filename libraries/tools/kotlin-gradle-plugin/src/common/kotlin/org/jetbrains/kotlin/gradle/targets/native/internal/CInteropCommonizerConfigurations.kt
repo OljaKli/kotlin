@@ -144,7 +144,7 @@ private fun Project.commonizedCInteropProducerDependencies(sourceSet: KotlinSour
             val id = component.id as? ProjectComponentIdentifier ?: return@mapNotNull null
 
             if (id in currentBuild) {
-                dependencies.project(id.projectPath)
+                dependencies.project(mapOf("path" to id.projectPath))
             } else {
                 // Dependency is coming from included build
                 val moduleVersion = component.moduleVersion ?: return@mapNotNull null
