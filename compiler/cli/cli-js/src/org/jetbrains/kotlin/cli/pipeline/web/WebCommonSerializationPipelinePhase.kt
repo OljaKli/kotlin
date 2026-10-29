@@ -80,7 +80,7 @@ internal object WebCommonSerializationPipelinePhase : PipelinePhase<WebFir2IrPip
                         languageVersionSettings,
                     )
 
-                    incrementalResultsConsumer.processCommonPackagePart(moduleName, sourceFile, packageFragment.toByteArray())
+                    incrementalResultsConsumer.processCommonMetadata(moduleName, sourceFile, packageFragment.toByteArray())
                 }
             }
         }
