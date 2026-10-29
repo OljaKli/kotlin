@@ -1,4 +1,3 @@
-// DISABLE_NATIVE: targetArchitecture=ARM32
 // MODULE: cinterop
 // FILE: fenv.def
 package = fenv
