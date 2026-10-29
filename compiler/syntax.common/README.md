@@ -42,7 +42,8 @@ The identifiers also allow `when` expressions over node types to be compiled int
 The module is also intended to hold common and abstract classes for syntax trees that don't depend on a specific
 frontend, so that the light tree-based utilities and FIR can work with any tree:
 
-* `KtSourceElement` and related classes (`KtSourceElementKind`, `AbstractKtSourceElement`, ...)
+* `KtSourceElementKind` and its descendants
+* `KtSourceElement` and its descendants
 * A platform-independent replacement for `LighterASTNode`, which exposes the node ID
   (`tokenId`) instead of an `IElementType`
 * A platform-independent replacement for `FlyweightCapableTreeStructure`

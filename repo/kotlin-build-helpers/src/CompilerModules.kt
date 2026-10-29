@@ -25,6 +25,7 @@ object CompilerModules {
     val commonCompilerModules = descriptorsCompilerModules + psiModules + arrayOf(
         ":compiler:frontend.common-psi",
         ":compiler:frontend.common",
+        ":compiler:syntax.common",
         ":compiler:util",
         ":compiler:config",
         ":compiler:config.jvm",
@@ -103,7 +104,6 @@ object CompilerModules {
         ":compiler:fir:raw-fir:light-tree2fir",
         ":compiler:fir:raw-fir:mp-parsing2fir",
         ":compiler:multiplatform-parsing",
-        ":compiler:syntax.common",
     )
 
     /**
