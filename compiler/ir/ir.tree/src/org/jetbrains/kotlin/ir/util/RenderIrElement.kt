@@ -1022,28 +1022,14 @@ private fun renderTypeAnnotations(annotations: List<IrAnnotation>, renderer: Ren
             }
     }
 
-@OptIn(DeprecatedCompilerApi::class)
-private fun StringBuilder.renderAsAnnotation(
-    irAnnotation: IrConstructorCall, // TODO change to IrAnnotation when KT-74200 is Fixed
+// TODO(KT-90080): Drop when all annotations in the position of annotation arguments are deserialized as IrAnnotation, not IrConstructorCall
+private fun StringBuilder.renderAsLegacyConstructorCallAnnotation(
+    irAnnotation: IrConstructorCall,
     renderer: RenderIrElementVisitor?,
     options: DumpIrTreeOptions,
 ) {
-    val annotationClassName = irAnnotation.symbol.getOwnerIfBound()?.parentAsClass?.name?.asString()
-        ?: run {
-            val nameSegments = (irAnnotation.symbol.signature as? CommonSignature)?.nameSegments.orEmpty()
-            runIf(nameSegments.size >= 2 && nameSegments[nameSegments.lastIndex] == SpecialNames.INIT.asString()) {
-                nameSegments[nameSegments.lastIndex - 1]
-            }
-        }
-        ?: "<unbound>"
-
-    append(annotationClassName)
-
-    if (irAnnotation.typeArguments.isNotEmpty()) {
-        irAnnotation.typeArguments.joinTo(this, ", ", "<", ">") {
-            it?.renderTypeWithRenderer(renderer, options) ?: "null"
-        }
-    }
+    append(irAnnotation.symbol.getLegacyAnnotationName())
+    renderAnnotationTypeArguments(irAnnotation, renderer, options)
 
     if (irAnnotation.arguments.isEmpty()) return
 
@@ -1055,10 +1041,59 @@ private fun StringBuilder.renderAsAnnotation(
     }
 }
 
+// TODO(KT-90080): Drop when all annotations in the position of annotation arguments are deserialized as IrAnnotation, not IrConstructorCall
+private fun IrConstructorSymbol.getLegacyAnnotationName(): String = getOwnerIfBound()?.parentAsClass?.name?.asString()
+    ?: run {
+        val nameSegments = (signature as? CommonSignature)?.nameSegments.orEmpty()
+        runIf(nameSegments.size >= 2 && nameSegments[nameSegments.lastIndex] == SpecialNames.INIT.asString()) {
+            nameSegments[nameSegments.lastIndex - 1]
+        }
+    }
+    ?: "<unbound>"
+
+private fun StringBuilder.renderAsAnnotation(
+    irAnnotation: IrAnnotation,
+    renderer: RenderIrElementVisitor?,
+    options: DumpIrTreeOptions,
+) {
+    val annotationClassName = runCatching {
+        irAnnotation.classSymbol.getOwnerIfBound()?.name?.asString()
+            ?: (irAnnotation.classSymbol.signature as? CommonSignature)?.shortName
+            ?: "<unbound>"
+    }.getOrElse {
+        @OptIn(DeprecatedCompilerApi::class)
+        irAnnotation.symbol.getLegacyAnnotationName()
+    }
+
+    append(annotationClassName)
+    renderAnnotationTypeArguments(irAnnotation, renderer, options)
+
+    if (irAnnotation.argumentMapping.isEmpty()) return
+
+    appendIterableWith(irAnnotation.argumentMapping.entries, separator = ", ", prefix = "(", postfix = ")") { [name, argument] ->
+        append(name.asString())
+        append(" = ")
+        renderAsAnnotationArgument(argument, renderer, options)
+    }
+}
+
+private fun StringBuilder.renderAnnotationTypeArguments(
+    irAnnotation: IrConstructorCall,
+    renderer: RenderIrElementVisitor?,
+    options: DumpIrTreeOptions,
+) {
+    if (irAnnotation.typeArguments.isNotEmpty()) {
+        irAnnotation.typeArguments.joinTo(this, ", ", "<", ">") {
+            it?.renderTypeWithRenderer(renderer, options) ?: "null"
+        }
+    }
+}
+
 private fun StringBuilder.renderAsAnnotationArgument(irElement: IrElement?, renderer: RenderIrElementVisitor?, options: DumpIrTreeOptions) {
     when (irElement) {
         null -> append("<null>")
-        is IrAnnotation, is IrConstructorCall -> renderAsAnnotation(irElement, renderer, options)
+        is IrAnnotation -> renderAsAnnotation(irElement, renderer, options)
+        is IrConstructorCall -> renderAsLegacyConstructorCallAnnotation(irElement, renderer, options.copy(printMemberAccessExpressionArgumentNames = true))
         is IrConst -> {
             renderIrConstAsAnnotationArgument(irElement)
         }
@@ -1068,7 +1103,9 @@ private fun StringBuilder.renderAsAnnotationArgument(irElement: IrElement?, rend
         }
         is IrGetEnumValue -> {
             val className = irElement.type.classOrNull?.getOwnerIfBound()?.name ?: "<UNKNOWN>"
-            val entryName = irElement.symbol.getOwnerIfBound()?.name ?: "<UNKNOWN>"
+            val entryName = irElement.symbol.getOwnerIfBound()?.name
+                ?: (irElement.symbol.signature as? CommonSignature)?.shortName
+                ?: "<UNKNOWN>"
             append("$className.$entryName")
         }
         is IrVararg -> {
