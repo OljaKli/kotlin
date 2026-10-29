@@ -314,7 +314,7 @@ internal class KaFirTypeCreator(
 
     private fun ConeKotlinType.withAnnotationAttributes(annotationClassIds: List<ClassId>): ConeKotlinType {
         // Same as in the compiler: `@ExtensionFunctionType` is only meaningful for function types
-        val allowExtensionFunctionType = functionTypeKind(rootModuleSession, expandTypeAliases = false) != null
+        val allowExtensionFunctionType = isSomeFunctionType(rootModuleSession)
         return this.withAttributes(constructAnnotationAttributes(annotationClassIds, allowExtensionFunctionType))
     }
 
