@@ -118,7 +118,7 @@ class Foo {
 
     companion {
         val lambda2 = {
-            <!CAN_BE_VAL_DELAYED_INITIALIZATION!>var<!> x = 0
+            var x = 0
             ++x
         }
     }
