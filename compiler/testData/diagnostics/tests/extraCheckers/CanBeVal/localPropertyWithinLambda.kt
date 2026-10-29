@@ -1,4 +1,5 @@
 // RUN_PIPELINE_TILL: CODEGEN
+// LANGUAGE: +CompanionBlocks
 // ISSUE: KT-90674
 
 fun invokeLater(block: () -> Unit) {}
@@ -112,6 +113,13 @@ class Foo {
                 var x = 0
                 ++x
             }
+        }
+    }
+
+    companion {
+        val lambda2 = {
+            <!CAN_BE_VAL_DELAYED_INITIALIZATION!>var<!> x = 0
+            ++x
         }
     }
 }
