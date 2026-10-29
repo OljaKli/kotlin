@@ -134,6 +134,13 @@ class ClassTypeCreatorDslTestCases(session: KaSession, caretToType: Map<String, 
         }
     }
 
+    fun testFunctionTypeAliasWithAttributeAnnotations(): KaType {
+        val alias = getClassLikeSymbolByCaret("alias")
+        return session.typeCreator.classType(alias) {
+            annotations(ATTRIBUTE_ANNOTATION_CLASS_IDS)
+        }
+    }
+
     fun testUserTypeWithPositiveAnnotation(): KaType {
         val userTypeSymbol = getClassLikeSymbolByCaret("type")
         return session.typeCreator.classType(userTypeSymbol) {

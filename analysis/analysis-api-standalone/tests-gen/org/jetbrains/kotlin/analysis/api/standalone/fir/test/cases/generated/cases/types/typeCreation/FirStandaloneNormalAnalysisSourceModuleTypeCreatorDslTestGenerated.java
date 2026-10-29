@@ -254,6 +254,12 @@ public class FirStandaloneNormalAnalysisSourceModuleTypeCreatorDslTestGenerated 
     }
 
     @Test
+    @TestMetadata("functionTypeAliasWithAttributeAnnotations.kt")
+    public void testFunctionTypeAliasWithAttributeAnnotations() {
+      run("functionTypeAliasWithAttributeAnnotations.kt");
+    }
+
+    @Test
     @TestMetadata("genericTypeAliasWithIntArgument.kt")
     public void testGenericTypeAliasWithIntArgument() {
       run("genericTypeAliasWithIntArgument.kt");
