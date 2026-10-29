@@ -202,7 +202,9 @@ abstract class AbstractTreeRawFirBuilder<Node : Any, Type : Any>(
     companion object {
         val ignoredTokensId: HashSet<Int> = hashSetOf(
             KtTokens.EOL_COMMENT_ID, KtTokens.BLOCK_COMMENT_ID, KtTokens.DOC_COMMENT_ID, KtTokens.SHEBANG_COMMENT_ID,
-            BasicElementTypes.WHITE_SPACE_ID, KtTokens.SEMICOLON_ID, NO_ID,
+            BasicElementTypes.WHITE_SPACE_ID, BasicElementTypes.BAD_CHARACTER_ID, BasicElementTypes.ERROR_ELEMENT_ID,
+            KtTokens.SEMICOLON_ID,
+            NO_ID, // TODO: preserved for safety but should be removed in future because `NO_ID` should never occur during kotlin files parsing
         )
     }
 }

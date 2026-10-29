@@ -44,6 +44,7 @@ import org.jetbrains.kotlin.fir.types.impl.FirImplicitTypeRefImplWithoutSource
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.name.StandardClassIds
+import org.jetbrains.kotlin.syntax.BasicElementTypes
 import org.jetbrains.kotlin.syntax.KtNodeTypes
 import org.jetbrains.kotlin.syntax.KtTokens
 import org.jetbrains.kotlin.syntax.NO_ID
@@ -706,7 +707,7 @@ class TreeRawFirExpressionBuilderProxy<Node : Any, Type : Any>(
 
                 // In invalid code like `::foo(args)`, the argument list is parsed
                 // inside an ERROR_ELEMENT child of the callable reference expression
-                NO_ID -> {
+                BasicElementTypes.ERROR_ELEMENT_ID -> {
                     for (errorChild in child.getChildren()) {
                         if (errorChild.toTokenId() == KtNodeTypes.VALUE_ARGUMENT_LIST_ID) {
                             errorArgumentListNode = errorChild
