@@ -158,9 +158,13 @@ KDouble Kotlin_math_round(KDouble x) {
 #if KONAN_USE_BUILTIN_ROUNDEVEN
     return __builtin_roundeven(x);
 #else
-    // Check if x is already integral, infinity or NaN. The inverted condition short-circuits NaNs.
+    // Check if x is already integral, infinity or NaN. The inverted condition handles NaNs.
     // It also guarantees that x can be cast to int64_t below without undefined behavior.
     if (!(fabs(x) < 0x1p52)) {
+        if (__builtin_isnan(x)) {
+            // Arithmetic quiets signaling NaNs, matching roundeven.
+            return x + x;
+        }
         return x;
     }
 
@@ -258,9 +262,13 @@ KFloat Kotlin_math_roundf(KFloat x) {
 #if KONAN_USE_BUILTIN_ROUNDEVEN
     return __builtin_roundevenf(x);
 #else
-    // Check if x is already integral, infinity or NaN. The inverted condition short-circuits NaNs.
+    // Check if x is already integral, infinity or NaN. The inverted condition handles NaNs.
     // It also guarantees that x can be cast to int32_t below without undefined behavior.
     if (!(fabsf(x) < 0x1p23f)) {
+        if (__builtin_isnan(x)) {
+            // Arithmetic quiets signaling NaNs, matching roundevenf.
+            return x + x;
+        }
         return x;
     }
 

@@ -238,6 +238,11 @@ class DoubleMathTest {
             assertEquals(value, truncate(value))
             assertEquals(value, round(value))
         }
+        for (bits in longArrayOf(0x7ff0_0000_0000_0001L, -0x000f_ffff_ffff_ffffL)) {
+            val roundedNaN = round(Double.fromBits(bits))
+            assertTrue(roundedNaN.isNaN(), "round($bits)")
+            assertTrue(roundedNaN.toRawBits() and (1L shl 51) != 0L, "round($bits) is not quiet")
+        }
         val data = arrayOf( //   v floor trunc round  ceil
                 doubleArrayOf( 0.3,  0.0,  0.0,  0.0,  1.0),
                 doubleArrayOf(-0.3, -1.0, -0.0, -0.0, -0.0),
@@ -650,6 +655,11 @@ class FloatMathTest {
             assertEquals(value, floor(value))
             assertEquals(value, truncate(value))
             assertEquals(value, round(value))
+        }
+        for (bits in intArrayOf(0x7f80_0001, -0x007f_ffff)) {
+            val roundedNaN = round(Float.fromBits(bits))
+            assertTrue(roundedNaN.isNaN(), "round($bits)")
+            assertTrue(roundedNaN.toRawBits() and (1 shl 22) != 0, "round($bits) is not quiet")
         }
         val data = arrayOf( //   v floor trunc round  ceil
                 floatArrayOf( 0.3F,  0.0F,  0.0F,  0.0F,  1.0F),
